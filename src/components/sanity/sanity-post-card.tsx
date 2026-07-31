@@ -4,20 +4,21 @@ import { SanityImage } from "./sanity-image";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import type { Locale } from "@/i18n/config";
 import { localizedPath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-const dateFormatter = new Intl.DateTimeFormat("en", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
-
-export function SanityPostCard({
+export async function SanityPostCard({
   post,
   locale = "en",
 }: {
   post: SanityPostPreview;
   locale?: Locale;
 }) {
+  const dictionary = await getDictionary(locale);
+  const dateFormatter = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   return (
     <article className="post-card">
       <Link
@@ -31,12 +32,12 @@ export function SanityPostCard({
           />
         ) : null}
         <span className="post-location">
-          {post.location ?? "From the desk"}
+          {post.location ?? dictionary.common.fromTheDesk}
         </span>
       </Link>
       <div className="post-card-copy">
         <p className="post-meta">
-          <span>{post.category ?? "Journal"}</span>
+          <span>{post.category ?? dictionary.common.journalFallback}</span>
           <time dateTime={post.publishedAt}>
             {dateFormatter.format(new Date(post.publishedAt))}
           </time>
@@ -51,7 +52,7 @@ export function SanityPostCard({
           className="text-link"
           href={localizedPath(locale, `/blog/${post.slug}`)}
         >
-          {locale === "id" ? "Baca cerita" : "Read story"} <ArrowIcon />
+          {dictionary.common.readStory} <ArrowIcon />
         </Link>
       </div>
     </article>

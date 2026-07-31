@@ -1,7 +1,8 @@
 import { defineQuery } from "next-sanity";
 
 export const postsQuery = defineQuery(`
-  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) {
+  *[_type == "post" && defined(slug.current) && publishedAt <= now() && language == $locale]
+  | order(publishedAt desc) {
     _id,
     "slug": slug.current,
     title,
@@ -14,11 +15,11 @@ export const postsQuery = defineQuery(`
 `);
 
 export const postSlugsQuery = defineQuery(
-  `*[_type == "post" && defined(slug.current)]{"slug": slug.current}`,
+  `*[_type == "post" && defined(slug.current) && language == $locale]{"slug": slug.current}`,
 );
 
 export const postQuery = defineQuery(`
-  *[_type == "post" && slug.current == $slug][0] {
+  *[_type == "post" && slug.current == $slug && language == $locale][0] {
     _id,
     "slug": slug.current,
     title,

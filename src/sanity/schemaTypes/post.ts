@@ -11,6 +11,14 @@ export const postType = defineType({
   ],
   fields: [
     defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      readOnly: true,
+      hidden: true,
+      group: "organization",
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",

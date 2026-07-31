@@ -3,20 +3,21 @@ import type { PostPreview } from "@/data/posts";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import type { Locale } from "@/i18n/config";
 import { localizedPath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-const dateFormatter = new Intl.DateTimeFormat("en", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
-
-export function PostCard({
+export async function PostCard({
   post,
   locale = "en",
 }: {
   post: PostPreview;
   locale?: Locale;
 }) {
+  const dictionary = await getDictionary(locale);
+  const dateFormatter = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   return (
     <article className="post-card">
       <Link
@@ -43,7 +44,7 @@ export function PostCard({
           className="text-link"
           href={localizedPath(locale, `/blog/${post.slug}`)}
         >
-          {locale === "id" ? "Baca cerita" : "Read story"} <ArrowIcon />
+          {dictionary.common.readStory} <ArrowIcon />
         </Link>
       </div>
     </article>

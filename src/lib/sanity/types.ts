@@ -19,6 +19,7 @@ export type SanityPostPreview = {
   coverImage?: SanityImage;
   category?: string;
   location?: string;
+  language?: string;
 };
 
 export type GalleryBlock = {

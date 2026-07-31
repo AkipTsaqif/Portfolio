@@ -1,5 +1,6 @@
 "use client";
 
+import { documentInternationalization } from "@sanity/document-internationalization";
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
@@ -15,6 +16,17 @@ export default defineConfig({
   projectId,
   dataset,
   basePath: "/studio",
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool(),
+    visionTool(),
+    documentInternationalization({
+      supportedLanguages: [
+        { id: "en", title: "English" },
+        { id: "id", title: "Bahasa Indonesia" },
+      ],
+      schemaTypes: ["post"],
+      languageField: "language",
+    }),
+  ],
   schema: { types: schemaTypes },
 });

@@ -4,16 +4,19 @@ import { notFound } from "next/navigation";
 import { SanityBlogPost } from "@/components/sanity/sanity-blog-content";
 import { getPost as getFallbackPost, posts } from "@/data/posts";
 import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale, localizedPath } from "@/i18n/config";
-import { getSanityPost, getSanityPosts } from "@/lib/sanity/fetch";
+import { isLocale, localizedPath, locales, type Locale } from "@/i18n/config";
+import { getSanityPost, getSanitySlugs } from "@/lib/sanity/fetch";
 import { urlForImage } from "@/lib/sanity/image";
 import { siteConfig } from "@/data/site";
 
 export async function generateStaticParams() {
-  const sanityPosts = await getSanityPosts();
-  return (sanityPosts ?? posts).flatMap((post) =>
-    ["en", "id"].map((locale) => ({ locale, slug: post.slug })),
+  const all = await Promise.all(
+    locales.map(async (locale: Locale) => {
+      const slugs = (await getSanitySlugs(locale)) ?? posts.map((p) => p.slug);
+      return slugs.map((slug) => ({ locale, slug }));
+    }),
   );
+  return all.flat();
 }
 
 export async function generateMetadata({
@@ -21,7 +24,7 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/blog/[slug]">): Promise<Metadata> {
   const { slug, locale } = await params;
   if (!isLocale(locale)) return {};
-  const sanityPost = await getSanityPost(slug);
+  const sanityPost = await getSanityPost(slug, locale);
   const post = sanityPost ?? getFallbackPost(slug);
   if (!post) return {};
   const socialImage = sanityPost?.seo?.socialImage ?? sanityPost?.coverImage;
@@ -59,7 +62,7 @@ export default async function BlogPostPage({
 }: PageProps<"/[locale]/blog/[slug]">) {
   const { slug, locale } = await params;
   if (!isLocale(locale)) notFound();
-  const post = (await getSanityPost(slug)) ?? getFallbackPost(slug);
+  const post = (await getSanityPost(slug, locale)) ?? getFallbackPost(slug);
   if (!post) notFound();
   const dictionary = await getDictionary(locale);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

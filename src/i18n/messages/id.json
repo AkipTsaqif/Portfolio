@@ -6,7 +6,9 @@
     "readStory": "Baca cerita",
     "backToJournal": "Kembali ke jurnal",
     "backToLab": "Kembali ke lab",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "journalFallback": "Jurnal",
+    "fromTheDesk": "Dari meja kerja"
   },
   "navigation": {
     "projects": "Proyek",

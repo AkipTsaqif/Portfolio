@@ -6,7 +6,9 @@
     "readStory": "Read story",
     "backToJournal": "Back to the journal",
     "backToLab": "Back to the lab",
-    "language": "Language"
+    "language": "Language",
+    "journalFallback": "Journal",
+    "fromTheDesk": "From the desk"
   },
   "navigation": {
     "projects": "Projects",

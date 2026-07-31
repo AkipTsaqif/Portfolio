@@ -1,19 +1,28 @@
 import type { SanityPost } from "@/lib/sanity/types";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { SanityImage } from "./sanity-image";
 import { SanityPortableText } from "./portable-text";
 
-const dateFormatter = new Intl.DateTimeFormat("en", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-
-export function SanityPostArticle({ post }: { post: SanityPost }) {
+export async function SanityPostArticle({
+  post,
+  locale,
+}: {
+  post: SanityPost;
+  locale: Locale;
+}) {
+  const dictionary = await getDictionary(locale);
+  const dateFormatter = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
   return (
     <>
       <header className="article-header">
         <p className="eyebrow">
-          {post.category ?? "Journal"} · {post.location ?? "From the desk"}
+          {post.category ?? dictionary.common.journalFallback} ·{" "}
+          {post.location ?? dictionary.common.fromTheDesk}
         </p>
         <h1>{post.title}</h1>
         <p className="article-deck">{post.excerpt}</p>

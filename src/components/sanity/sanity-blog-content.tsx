@@ -11,7 +11,7 @@ import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
 export async function SanityLatestPosts({ locale }: { locale: Locale }) {
-  const sanityPosts = await getSanityPosts();
+  const sanityPosts = await getSanityPosts(locale);
   if (!sanityPosts)
     return (
       <>
@@ -31,7 +31,7 @@ export async function SanityLatestPosts({ locale }: { locale: Locale }) {
 
 export async function SanityBlogIndex({ locale }: { locale: Locale }) {
   const dictionary = await getDictionary(locale);
-  const sanityPosts = await getSanityPosts();
+  const sanityPosts = await getSanityPosts(locale);
   if (!sanityPosts)
     return (
       <div className="post-grid blog-page-grid">
@@ -63,8 +63,8 @@ export async function SanityBlogPost({
   locale: Locale;
 }) {
   const dictionary = await getDictionary(locale);
-  const post = await getSanityPost(slug);
-  if (post) return <SanityPostArticle post={post} />;
+  const post = await getSanityPost(slug, locale);
+  if (post) return <SanityPostArticle post={post} locale={locale} />;
   const fallback = getFallbackPost(slug);
   if (!fallback) return null;
   return (
