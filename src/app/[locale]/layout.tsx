@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   ),
   title: {
-    default: "Sri Ahmad Tsaqif — Web developer",
-    template: "%s — Sri Ahmad Tsaqif",
+    default: "Web developer",
+    template: "%s — Akip Tsaqif",
   },
   description:
     "A web developer building thoughtful digital products and documenting the places that inspire them.",
-  openGraph: { type: "website", siteName: "Sri Ahmad Tsaqif" },
+  openGraph: { type: "website", siteName: "Akip Tsaqif" },
 };
 
 export function generateStaticParams() {

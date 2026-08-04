@@ -1,4 +1,4 @@
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "d4k85v13";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
 export const sanityEnv = {
