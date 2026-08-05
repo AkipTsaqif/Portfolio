@@ -36,6 +36,12 @@ export function SiteFooter() {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}
           </p>
+          <p className="footer-ai-note">
+            {dictionary.footer.aiDisclosure}{" "}
+            <Link href={localizedPath(locale, "/ai-usage")}>
+              {dictionary.footer.aiDisclosureLink}
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

@@ -37,12 +37,16 @@ yarn-error.log*
 .env*
 !.env.example
 
-# local planning notes — only README.md is tracked in this repo
-/plan-*.md
+# local planning notes — keep ALL markdown untracked except README.md
+# (plan-*.md, specs/ docs, etc. stay local; push only README.md + AI-USAGE.md)
+*.md
+!README.md
+!AI-USAGE.md
 /plan-*.markdown
 
 # sanity dataset backups + content snapshots (local only, never push)
 /backups/
+/backups.7z
 
 # vercel
 .vercel

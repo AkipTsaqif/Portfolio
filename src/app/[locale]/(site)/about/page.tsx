@@ -34,6 +34,12 @@ export default async function AboutPage({
           <p className="lead">{t.lead}</p>
           <p>{t.paragraph1}</p>
           <p>{t.paragraph2}</p>
+          <p className="about-ai-note">
+            {t.aiDisclosure}{" "}
+            <Link href={localizedPath(locale, "/ai-usage")}>
+              {t.aiDisclosureLink}
+            </Link>
+          </p>
           <h2>{t.skillsTitle}</h2>
           <ul className="skill-list">
             {t.skills.map((skill, index) => (

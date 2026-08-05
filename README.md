@@ -15,3 +15,7 @@ A personal web developer portfolio and travel journal built with [Next.js](https
 - **Portfolio** — project showcase with local data-driven entries
 - **Travel Journal** — CMS-backed blog with local fallback content when no Sanity project is configured
 - **Lab** — a collection of browser-first utilities, including a PDF Progress Chart that parses reports locally without uploading data
+
+## AI usage
+
+This project was built with AI assistance. See [AI-USAGE.md](./AI-USAGE.md) for a transparent breakdown of the tools used and what stayed human.

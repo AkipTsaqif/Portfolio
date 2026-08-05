@@ -20,7 +20,16 @@
   "footer": {
     "kicker": "Punya proyek dalam pikiran?",
     "cta": "Mari membuat sesuatu yang baik.",
-    "location": "Berbasis di Indonesia · Tersedia di seluruh dunia"
+    "location": "Berbasis di Indonesia · Tersedia di seluruh dunia",
+    "aiDisclosure": "Dibangun dengan bantuan AI —",
+    "aiDisclosureLink": "bagaimana situs ini dibuat"
+  },
+  "aiUsage": {
+    "metaTitle": "Penggunaan AI",
+    "metaDescription": "Rincian transparan tentang bagaimana alat AI digunakan untuk membangun situs ini.",
+    "eyebrow": "Transparansi",
+    "title": "Bagaimana situs ini dibuat.",
+    "description": "Saya membangun dengan bantuan AI, dan saya ingin jujur soal itu. Berikut persisnya apa yang dikerjakan AI dan apa yang tetap dikerjakan manusia."
   },
   "home": {
     "status": "Tersedia untuk proyek pilihan",
@@ -61,7 +70,9 @@
       "Pemikiran produk",
       "Antarmuka aksesibel"
     ],
-    "cta": "Mari bekerja bersama"
+    "cta": "Mari bekerja bersama",
+    "aiDisclosure": "Situs ini dibangun dengan bantuan AI —",
+    "aiDisclosureLink": "ini caranya"
   },
   "projects": {
     "metaTitle": "Proyek",

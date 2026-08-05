@@ -10,7 +10,15 @@ import { getSanitySlugs } from "@/lib/sanity/fetch";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const staticRoutes = ["", "/about", "/projects", "/blog", "/lab", "/contact"];
+  const staticRoutes = [
+    "",
+    "/about",
+    "/projects",
+    "/blog",
+    "/lab",
+    "/contact",
+    "/ai-usage",
+  ];
 
   // Per-locale Sanity blog slugs (falls back to static posts when Sanity is not
   // configured). Slugs differ per language under document-level i18n, so we

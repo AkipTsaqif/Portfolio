@@ -20,7 +20,16 @@
   "footer": {
     "kicker": "Have a project in mind?",
     "cta": "Let's make something good.",
-    "location": "Based in Indonesia · Available worldwide"
+    "location": "Based in Indonesia · Available worldwide",
+    "aiDisclosure": "Built with AI assistance —",
+    "aiDisclosureLink": "how this site is made"
+  },
+  "aiUsage": {
+    "metaTitle": "AI usage",
+    "metaDescription": "A transparent breakdown of how AI tools were used to build this site.",
+    "eyebrow": "Transparency",
+    "title": "How this site is built.",
+    "description": "I build with AI assistance, and I want to be upfront about it. Here's exactly what the AI did and what stayed human."
   },
   "home": {
     "status": "Available for selected projects",
@@ -61,7 +70,9 @@
       "Product thinking",
       "Accessible interfaces"
     ],
-    "cta": "Let's work together"
+    "cta": "Let's work together",
+    "aiDisclosure": "This site is built with AI assistance —",
+    "aiDisclosureLink": "here's how"
   },
   "projects": {
     "metaTitle": "Projects",
