@@ -1,0 +1,86 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { QuestionCard } from "@/features/lab/daily-questions/components/question-card";
+import { isDatabaseConfigured } from "@/lib/db/env";
+import { toDailyQuestion } from "@/features/lab/daily-questions/view";
+import { resolveDailyQuestion } from "@/features/lab/daily-questions/questions";
+import {
+  resolveQuestionKind,
+  utcToday,
+} from "@/features/lab/daily-questions/utc-day";
+import { isLocale, localizedPath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+
+/**
+ * The public question of the day.
+ *
+ * `force-dynamic` on purpose: with a build-time render, `next build` would need
+ * a reachable database and would happily bake a stale question into the page.
+ * Every database read is wrapped, so an outage degrades to a message rather than
+ * a failed build or a 500.
+ */
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/lab/daily-questions/today">): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const t = (await getDictionary(locale)).dailyQuestions;
+  return { title: t.today.metaTitle, description: t.today.metaDescription };
+}
+
+export default async function TodayPage({
+  params,
+}: PageProps<"/[locale]/lab/daily-questions/today">) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  const dictionary = await getDictionary(locale);
+  const t = dictionary.dailyQuestions;
+  const today = utcToday();
+
+  // The public page shows the weekly-rhythm question, which is what a room with
+  // the default setting sees.
+  const kind = resolveQuestionKind("mixed", today);
+  const question = isDatabaseConfigured()
+    ? await resolveDailyQuestion(kind, today).catch(() => null)
+    : null;
+
+  const view = toDailyQuestion(question, locale);
+
+  return (
+    <div className="shell page-wrap dq-page dq-page-narrow">
+      <Link
+        className="back-link"
+        href={localizedPath(locale, "/lab/daily-questions")}
+      >
+        ← {t.metaTitle}
+      </Link>
+
+      <header className="page-intro dq-intro">
+        <p className="eyebrow">{t.today.eyebrow}</p>
+        <h1>{t.today.title}</h1>
+        <div className="dq-intro-copy">
+          <p>{t.today.description}</p>
+        </div>
+      </header>
+
+      {view ? (
+        <QuestionCard copy={t} heading={t.today.eyebrow} question={view} />
+      ) : (
+        <p className="dq-note dq-missed">{t.today.empty}</p>
+      )}
+
+      <nav className="dq-public-links">
+        <Link href={localizedPath(locale, "/lab/daily-questions/archive")}>
+          {t.archive.metaTitle} →
+        </Link>
+        <Link href={localizedPath(locale, "/lab/daily-questions")}>
+          {t.archive.startRoom} →
+        </Link>
+      </nav>
+    </div>
+  );
+}

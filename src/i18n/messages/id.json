@@ -115,7 +115,10 @@
     "available": "Tool yang tersedia",
     "runsLocally": "Berjalan di browser Anda",
     "webUtility": "Utilitas web",
-    "status": { "Stable": "Stabil", "Experimental": "Eksperimental" },
+    "status": {
+      "Stable": "Stabil",
+      "Experimental": "Eksperimental"
+    },
     "category": {
       "Developer": "Developer",
       "Design": "Desain",
@@ -129,7 +132,17 @@
     "private": "Privat",
     "privateText": "Jaga data tetap lokal bila memungkinkan.",
     "open": "Terbuka",
-    "openText": "Berguna tanpa akun atau paywall."
+    "openText": "Berguna tanpa akun atau paywall.",
+    "toolCopy": {
+      "pdf-progress-chart": {
+        "name": "Grafik Progress PDF",
+        "description": "Bandingkan metrik progress dari beberapa laporan SE2026 secara lokal."
+      },
+      "daily-questions": {
+        "name": "Tanya Harian",
+        "description": "Satu pertanyaan setiap hari, dijawab tertutup, lalu dibuka untuk saling dibaca."
+      }
+    }
   },
   "pdfToolPage": {
     "metaTitle": "Grafik Progress PDF",
@@ -208,5 +221,164 @@
     "notFoundTitle": "Jalur ini belum menuju ke mana-mana.",
     "notFoundDescription": "Halaman ini mungkin sudah berpindah, atau memang belum pernah ada di peta.",
     "home": "Kembali ke beranda"
+  },
+  "dailyQuestions": {
+    "toolName": "Tanya Harian",
+    "toolDescription": "Satu pertanyaan setiap hari, dijawab tertutup, lalu dibuka untuk saling dibaca.",
+    "metaTitle": "Tanya Harian",
+    "metaDescription": "Satu pertanyaan setiap hari untuk kamu dan orang-orangmu. Semua menjawab tertutup, dan jawaban terbuka begitu kamu menulis jawabanmu sendiri.",
+    "eyebrow": "Lab · Ritual harian",
+    "title": "Satu pertanyaan sehari, dijawab sebelum kamu melihat.",
+    "description": "Ritual kecil bersama. Kode ruang sebagai ganti akun, satu pertanyaan per hari UTC, dan jawaban yang tetap tersegel sampai kamu menulis jawabanmu sendiri. Kembali lagi besok.",
+    "privacyNote": "Privat sejak awal — tulisan orang lain tidak pernah sampai ke perambanmu sebelum kamu menjawab",
+    "howEyebrow": "Cara kerjanya",
+    "howTitle": "Tiga hal, sekali saja.",
+    "step1Title": "Buat ruang",
+    "step1Text": "Kamu mendapat kode dan tautan. Tanpa pendaftaran dan tanpa verifikasi apa pun.",
+    "step2Title": "Kirim tautannya",
+    "step2Text": "Siapa pun yang membukanya cukup memilih nama tampilan. Perangkatnya mengingatnya selama setahun.",
+    "step3Title": "Jawab, lalu baca",
+    "step3Text": "Tulis jawabanmu lebih dulu. Begitu kamu kirim, jawaban orang lain terbuka untukmu.",
+    "createRoom": {
+      "title": "Buat ruang",
+      "description": "Kamu akan mendapat kode dan tautan. Mengirimkannya ke seseorang sudah cukup jadi undangan.",
+      "nameLabel": "Namamu",
+      "namePlaceholder": "Nama yang akan mereka lihat",
+      "roomNameLabel": "Nama ruang (opsional)",
+      "roomNamePlaceholder": "Kita",
+      "modeLabel": "Gaya pertanyaan",
+      "modeHelp": "Bisa diubah nanti, dan berlaku mulai pertanyaan berikutnya.",
+      "submit": "Buat ruang",
+      "submitting": "Membuat…"
+    },
+    "mode": {
+      "mixed": "Irama mingguan",
+      "mixedHint": "Pengetahuan di hari kerja, terbuka di akhir pekan.",
+      "knowledge": "Hanya pengetahuan",
+      "knowledgeHint": "Pertanyaan dengan jawaban terverifikasi setiap hari, dibuka setelah kamu menjawab.",
+      "reflective": "Hanya pertanyaan terbuka",
+      "reflectiveHint": "Pertanyaan personal setiap hari. Tanpa jawaban benar, tanpa yang perlu dicari."
+    },
+    "joinRoom": {
+      "title": "Gabung ruang",
+      "description": "Tempel kode yang kamu terima, atau langsung buka tautannya.",
+      "codeLabel": "Kode ruang",
+      "codePlaceholder": "ABCD-EFGH-JKMN",
+      "nameLabel": "Namamu",
+      "namePlaceholder": "Nama yang akan mereka lihat",
+      "submit": "Gabung ruang",
+      "submitting": "Bergabung…"
+    },
+    "haveCode": "Sudah punya kode?",
+    "createOwn": "Buat ruang sendiri",
+    "goToRoom": "Masuk ke ruangmu",
+    "codeHint": "Kode terdiri dari 12 karakter dan tidak pernah memuat I, L, O, U, 0, atau 1.",
+    "room": {
+      "metaTitle": "Ruangmu",
+      "invite": "Undang",
+      "inviteHelp": "Siapa pun yang punya tautan ini bisa masuk ke ruang ini. Tidak ada akun, jadi perlakukan seperti kunci rumah.",
+      "copyLink": "Salin tautan",
+      "copied": "Tersalin",
+      "copyFailed": "Gagal menyalin — pilih tautannya lalu salin manual.",
+      "code": "Kode ruang",
+      "members": "Anggota",
+      "todaysQuestion": "Pertanyaan hari ini",
+      "noQuestion": "Belum ada pertanyaan untuk hari ini",
+      "noQuestionHelp": "Generator sedang tidak tersedia dan pertanyaan cadangan gagal dicatat. Coba lagi sebentar.",
+      "kindKnowledge": "Pengetahuan",
+      "kindReflective": "Terbuka",
+      "difficulty": {
+        "easy": "Mudah",
+        "medium": "Sedang",
+        "hard": "Sulit"
+      },
+      "sourceFallback": "Pertanyaan cadangan yang sudah diperiksa — generator tidak tersedia hari ini.",
+      "yourAnswer": "Jawabanmu",
+      "answerPlaceholder": "Tidak perlu buru-buru. Setelah dikirim, jawaban tidak bisa diedit.",
+      "answerCounter": "karakter",
+      "submit": "Kirim dan kunci",
+      "submitting": "Mengirim…",
+      "lockedTitle": "Terkunci",
+      "lockedHelp": "Jawaban ini final sejak kamu mengirimnya. Tarik kembali kalau ingin mulai ulang.",
+      "waiting": "Menunggu",
+      "waitingFor": "Menunggu {name}",
+      "answerKey": "Jawabannya",
+      "yourStreak": "Runtutanmu",
+      "sharedStreak": "Berdua",
+      "dayUnit": "hari",
+      "dayUnitOne": "hari",
+      "calendarLink": "Kalender",
+      "settings": "Pengaturan ruang",
+      "settingsHelp": "Mengubah gaya berlaku mulai pertanyaan berikutnya.",
+      "leave": "Keluar dari ruang",
+      "leaveConfirm": "Keluar dari ruang ini? Jawabanmu tetap tersimpan di arsip untuk yang lain.",
+      "deleteRoom": "Hapus ruang",
+      "deleteRoomConfirm": "Hapus ruang ini untuk semua orang? Tindakan ini tidak bisa dibatalkan.",
+      "retract": "Tarik jawaban",
+      "retractConfirm": "Tarik jawabanmu? Jawaban orang lain terkunci lagi sampai kamu menulis yang baru.",
+      "ownAnswerNote": "Ini milikmu.",
+      "reactToAnswer": "Beri reaksi",
+      "removeReaction": "Hapus reaksi",
+      "answers": "Jawaban",
+      "missedDay": "Kamu tidak menjawab hari itu, jadi jawaban mereka tetap tersegel.",
+      "theirReactions": "Reaksi mereka"
+    },
+    "calendar": {
+      "title": "Kalender",
+      "description": "Setiap hari sejak ruang ini ada. Buka satu hari untuk membacanya lagi.",
+      "previous": "Bulan sebelumnya",
+      "next": "Bulan berikutnya",
+      "open": "Buka",
+      "status": {
+        "complete": "Semua sudah menjawab",
+        "partial": "Kamu sudah menjawab",
+        "locked": "Menunggu kamu",
+        "none": "Belum ada yang menjawab",
+        "future": "Belum waktunya"
+      }
+    },
+    "archive": {
+      "metaTitle": "Arsip pertanyaan",
+      "metaDescription": "Semua pertanyaan harian dari eksperimen Lab ini, satu halaman per hari, lengkap dengan jawaban terverifikasi untuk hari pengetahuan.",
+      "eyebrow": "Lab · Arsip",
+      "title": "Semua pertanyaan sejauh ini.",
+      "description": "Separuh ritual yang bersifat publik. Pertanyaan dan jawabannya terbuka; jawaban personal siapa pun tidak pernah.",
+      "empty": "Belum ada pertanyaan yang tercatat. Yang pertama muncul pukul 00:00 UTC.",
+      "knowledge": "Pengetahuan",
+      "reflective": "Terbuka",
+      "backToArchive": "Semua pertanyaan",
+      "startRoom": "Buat ruang sendiri",
+      "dayTitle": "Pertanyaan untuk {date}"
+    },
+    "today": {
+      "metaTitle": "Pertanyaan hari ini",
+      "metaDescription": "Pertanyaan yang sedang dijawab semua ruang Tanya Harian hari ini.",
+      "eyebrow": "Hari ini · 00:00 UTC",
+      "title": "Pertanyaan hari ini.",
+      "description": "Semua orang di semua ruang melihat pertanyaan ini hari ini. Jawaban bersifat privat; kamu hanya membaca jawaban orang lain setelah menulis jawabanmu sendiri.",
+      "empty": "Pertanyaan hari ini belum siap. Pertanyaan muncul pukul 00:00 UTC."
+    },
+    "errors": {
+      "notConfigured": "Alat ini belum dikonfigurasi di deployment ini.",
+      "invalidInput": "Periksa kembali formulirnya lalu coba lagi.",
+      "nameRequired": "Masukkan nama dulu.",
+      "nameTaken": "Nama itu sudah dipakai di ruang ini. Pilih nama lain, atau buka tautan undangan di perangkat yang sudah bergabung.",
+      "alreadyInRoom": "Perangkat ini sudah berada di sebuah ruang. Keluar dulu, atau pakai peramban lain.",
+      "roomNotFound": "Tidak ada ruang dengan kode itu. Periksa lagi.",
+      "rateLimited": "Terlalu banyak percobaan dari koneksi ini. Coba lagi nanti.",
+      "unavailable": "Ada yang gagal. Coba lagi.",
+      "notInRoom": "Kamu tidak sedang berada di ruang mana pun di perangkat ini.",
+      "invalidAnswer": "Tulis sesuatu dulu — antara 1 sampai 2000 karakter.",
+      "notToday": "Pertanyaan itu sudah tidak terbuka.",
+      "questionChanged": "Gaya pertanyaan ruang ini berubah, jadi pertanyaan hari ini berbeda sekarang. Muat ulang halaman.",
+      "alreadyAnswered": "Kamu sudah menjawab hari ini.",
+      "ownAnswer": "Kamu tidak bisa memberi reaksi pada jawabanmu sendiri."
+    },
+    "notices": {
+      "answerLocked": "Terkunci. Jawaban mereka sekarang terbuka untukmu.",
+      "answerRetracted": "Jawaban ditarik kembali.",
+      "modeChanged": "Gaya pertanyaan diperbarui. Berlaku mulai pertanyaan berikutnya."
+    },
+    "preparing": "Menyiapkan pertanyaan hari ini…"
   }
 }
