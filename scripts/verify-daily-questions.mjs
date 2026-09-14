@@ -14,6 +14,9 @@
  * and deletes the rooms it creates afterwards.
  */
 import { neon } from "@neondatabase/serverless";
+import { loadEnvLocal } from "./env-local.mjs";
+
+loadEnvLocal();
 
 const argBase = process.argv.find((value) => value.startsWith("--base="));
 const BASE = argBase

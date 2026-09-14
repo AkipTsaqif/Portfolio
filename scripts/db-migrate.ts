@@ -17,6 +17,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { neon } from "@neondatabase/serverless";
+import { loadEnvLocal } from "./env-local.mjs";
+
+loadEnvLocal();
 
 const candidate =
   process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim();
