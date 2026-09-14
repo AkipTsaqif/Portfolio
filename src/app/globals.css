@@ -24,6 +24,9 @@
 }
 html {
   scroll-behavior: smooth;
+  /* the header is sticky, so in-page anchors (#main-content, :target) would
+     otherwise land underneath it. matches .header-inner's height. */
+  scroll-padding-top: 78px;
 }
 body {
   background: var(--paper);
@@ -65,7 +68,14 @@ button:focus-visible {
   top: 16px;
 }
 .site-header {
+  /* solid, not translucent: the page scrolls underneath it, and this file uses
+     no backdrop-filter anywhere else. z-index sits below .skip-link (100) so the
+     skip target is still reachable when focused. */
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 .header-inner {
   align-items: center;
@@ -1755,6 +1765,9 @@ button:focus-visible {
   }
   .header-inner {
     height: 68px;
+  }
+  html {
+    scroll-padding-top: 68px;
   }
   .nav-list {
     gap: 11px;
