@@ -115,7 +115,10 @@
     "available": "Available tools",
     "runsLocally": "Runs in your browser",
     "webUtility": "Web utility",
-    "status": { "Stable": "Stable", "Experimental": "Experimental" },
+    "status": {
+      "Stable": "Stable",
+      "Experimental": "Experimental"
+    },
     "category": {
       "Developer": "Developer",
       "Design": "Design",
@@ -129,7 +132,17 @@
     "private": "Private",
     "privateText": "Keep your data local when possible.",
     "open": "Open",
-    "openText": "Useful without an account or paywall."
+    "openText": "Useful without an account or paywall.",
+    "toolCopy": {
+      "pdf-progress-chart": {
+        "name": "PDF Progress Chart",
+        "description": "Compare progress metrics from multiple SE2026 reports locally."
+      },
+      "daily-questions": {
+        "name": "Daily Questions",
+        "description": "One question a day, answered privately, then revealed to each other."
+      }
+    }
   },
   "pdfToolPage": {
     "metaTitle": "PDF Progress Chart",
@@ -208,5 +221,164 @@
     "notFoundTitle": "This path doesn't lead anywhere—yet.",
     "notFoundDescription": "The page may have moved, or perhaps it was never on the map.",
     "home": "Return home"
+  },
+  "dailyQuestions": {
+    "toolName": "Daily Questions",
+    "toolDescription": "One question a day, answered privately, then revealed to each other.",
+    "metaTitle": "Daily Questions",
+    "metaDescription": "One question a day for you and your people. Everyone answers privately, and every answer unlocks the moment you write your own.",
+    "eyebrow": "The lab · Daily ritual",
+    "title": "One question a day, answered before you look.",
+    "description": "A small shared ritual. A room code instead of accounts, one question per UTC day, and answers that stay sealed until you have written your own. Come back tomorrow.",
+    "privacyNote": "Private by design — nobody's words reach your browser until you have answered",
+    "howEyebrow": "How it works",
+    "howTitle": "Three things, once.",
+    "step1Title": "Start a room",
+    "step1Text": "You get a code and a link. There is no sign-up and nothing to verify.",
+    "step2Title": "Send the link",
+    "step2Text": "Whoever opens it picks a display name and is in. Their device remembers them for a year.",
+    "step3Title": "Answer, then read",
+    "step3Text": "Write your answer first. The moment you submit it, everyone else's opens for you.",
+    "createRoom": {
+      "title": "Start a room",
+      "description": "You will get a code and a link. Sending it to someone is the whole invite.",
+      "nameLabel": "Your name",
+      "namePlaceholder": "How they will see you",
+      "roomNameLabel": "Room name (optional)",
+      "roomNamePlaceholder": "Us",
+      "modeLabel": "Question style",
+      "modeHelp": "You can change this later, and it applies from the next question.",
+      "submit": "Create room",
+      "submitting": "Creating…"
+    },
+    "mode": {
+      "mixed": "Weekly rhythm",
+      "mixedHint": "Knowledge on weekdays, open-ended at the weekend.",
+      "knowledge": "Knowledge only",
+      "knowledgeHint": "A question with a verified answer every day, revealed once you have answered.",
+      "reflective": "Open-ended only",
+      "reflectiveHint": "A personal question every day. No right answer, nothing to look up."
+    },
+    "joinRoom": {
+      "title": "Join a room",
+      "description": "Paste the code you were given, or just open the link.",
+      "codeLabel": "Room code",
+      "codePlaceholder": "ABCD-EFGH-JKMN",
+      "nameLabel": "Your name",
+      "namePlaceholder": "How they will see you",
+      "submit": "Join room",
+      "submitting": "Joining…"
+    },
+    "haveCode": "Already have a code?",
+    "createOwn": "Start your own room",
+    "goToRoom": "Go to your room",
+    "codeHint": "Codes are 12 characters and never contain I, L, O, U, 0 or 1.",
+    "room": {
+      "metaTitle": "Your room",
+      "invite": "Invite",
+      "inviteHelp": "Anyone with this link joins this room. There are no accounts, so treat it like a house key.",
+      "copyLink": "Copy link",
+      "copied": "Copied",
+      "copyFailed": "Copy failed — select the link and copy it manually.",
+      "code": "Room code",
+      "members": "Members",
+      "todaysQuestion": "Today's question",
+      "noQuestion": "No question for today yet",
+      "noQuestionHelp": "The generator was unavailable and the standby question could not be recorded. Try again in a moment.",
+      "kindKnowledge": "Knowledge",
+      "kindReflective": "Open-ended",
+      "difficulty": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      },
+      "sourceFallback": "Hand-checked standby question — the generator was unavailable today.",
+      "yourAnswer": "Your answer",
+      "answerPlaceholder": "Take your time. You cannot edit this once you submit.",
+      "answerCounter": "characters",
+      "submit": "Submit and lock",
+      "submitting": "Submitting…",
+      "lockedTitle": "Locked",
+      "lockedHelp": "It became final the moment you submitted it. Retract it if you want to start over.",
+      "waiting": "Waiting",
+      "waitingFor": "Waiting for {name}",
+      "answerKey": "The answer",
+      "yourStreak": "Your streak",
+      "sharedStreak": "Together",
+      "dayUnit": "days",
+      "dayUnitOne": "day",
+      "calendarLink": "Calendar",
+      "settings": "Room settings",
+      "settingsHelp": "Changing the style takes effect from the next question.",
+      "leave": "Leave room",
+      "leaveConfirm": "Leave this room? Your answers stay in the archive for the others.",
+      "deleteRoom": "Delete room",
+      "deleteRoomConfirm": "Delete this room for everyone? This cannot be undone.",
+      "retract": "Retract answer",
+      "retractConfirm": "Retract your answer? Everyone else's answers lock again until you write a new one.",
+      "ownAnswerNote": "This is yours.",
+      "reactToAnswer": "React",
+      "removeReaction": "Remove reaction",
+      "answers": "Answers",
+      "missedDay": "You did not answer this day, so their answers stay sealed.",
+      "theirReactions": "Their reaction"
+    },
+    "calendar": {
+      "title": "Calendar",
+      "description": "Every day this room has existed. Open a day to read it again.",
+      "previous": "Previous month",
+      "next": "Next month",
+      "open": "Open",
+      "status": {
+        "complete": "Everyone answered",
+        "partial": "You answered",
+        "locked": "Waiting for you",
+        "none": "Nobody answered",
+        "future": "Not yet"
+      }
+    },
+    "archive": {
+      "metaTitle": "Question archive",
+      "metaDescription": "Every daily question this Lab experiment has asked, one page per day, with the verified answer for knowledge days.",
+      "eyebrow": "The lab · Archive",
+      "title": "Every question so far.",
+      "description": "The public half of the ritual. Questions and answers are open; nobody's personal answer ever is.",
+      "empty": "No questions recorded yet. The first one lands at 00:00 UTC.",
+      "knowledge": "Knowledge",
+      "reflective": "Open-ended",
+      "backToArchive": "All questions",
+      "startRoom": "Start your own room",
+      "dayTitle": "Question for {date}"
+    },
+    "today": {
+      "metaTitle": "Today's question",
+      "metaDescription": "The question the Daily Questions rooms are answering today.",
+      "eyebrow": "Today · 00:00 UTC",
+      "title": "Today's question.",
+      "description": "Everyone in every room sees this one today. Answers are private; you only read someone else's once you have written your own.",
+      "empty": "Today's question is not ready yet. It appears at 00:00 UTC."
+    },
+    "errors": {
+      "notConfigured": "This tool is not configured on this deployment yet.",
+      "invalidInput": "Please check the form and try again.",
+      "nameRequired": "Please enter a name.",
+      "nameTaken": "That name is already used in this room. Pick another, or open the invite link on the device that already joined.",
+      "alreadyInRoom": "This device is already in a room. Leave it first, or use a different browser.",
+      "roomNotFound": "No room has that code. Check it and try again.",
+      "rateLimited": "Too many attempts from this connection. Try again later.",
+      "unavailable": "Something went wrong. Please try again.",
+      "notInRoom": "You are not in a room on this device.",
+      "invalidAnswer": "Write something first — between 1 and 2000 characters.",
+      "notToday": "That question is no longer open.",
+      "questionChanged": "The room's question style changed, so today's question is different now. Reload the page.",
+      "alreadyAnswered": "You have already answered today.",
+      "ownAnswer": "You cannot react to your own answer."
+    },
+    "notices": {
+      "answerLocked": "Locked. Their answers are open to you now.",
+      "answerRetracted": "Answer retracted.",
+      "modeChanged": "Question style updated. It applies from the next question."
+    },
+    "preparing": "Preparing today's question…"
   }
 }

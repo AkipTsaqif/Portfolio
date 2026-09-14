@@ -20,6 +20,14 @@ export default async function LabPage({ params }: PageProps<"/[locale]/lab">) {
   if (!isLocale(locale)) notFound();
   const dictionary = await getDictionary(locale);
   const t = dictionary.lab;
+
+  // Localised copy lives in the dictionary, keyed by slug, so a tool's card
+  // reads in the visitor's language instead of falling back to English.
+  const toolCopy = t.toolCopy as Record<
+    string,
+    { name: string; description: string }
+  >;
+
   return (
     <div className="shell page-wrap lab-page">
       <header className="page-intro lab-intro">
@@ -33,36 +41,32 @@ export default async function LabPage({ params }: PageProps<"/[locale]/lab">) {
         </div>
       </header>
       <section className="lab-grid" aria-label={t.available}>
-        {labTools.map((tool, index) => (
-          <article className="lab-card" key={tool.slug}>
-            <Link
-              className="lab-card-link"
-              href={localizedPath(locale, `/lab/${tool.slug}`)}
-            >
-              <div className="lab-card-topline">
-                <span>0{index + 1}</span>
-                <span>{t.status[tool.status]}</span>
-              </div>
-              <div className="lab-card-copy">
-                <p className="lab-category">{t.category[tool.category]}</p>
-                <h2>
-                  {tool.slug === "pdf-progress-chart"
-                    ? dictionary.pdfTool.toolName
-                    : tool.name}
-                </h2>
-                <p>
-                  {tool.slug === "pdf-progress-chart"
-                    ? dictionary.pdfTool.toolDescription
-                    : tool.description}
-                </p>
-              </div>
-              <div className="lab-card-footer">
-                <span>{tool.localOnly ? t.runsLocally : t.webUtility}</span>
-                <ArrowIcon />
-              </div>
-            </Link>
-          </article>
-        ))}
+        {labTools.map((tool, index) => {
+          const copy = toolCopy[tool.slug];
+
+          return (
+            <article className="lab-card" key={tool.slug}>
+              <Link
+                className="lab-card-link"
+                href={localizedPath(locale, `/lab/${tool.slug}`)}
+              >
+                <div className="lab-card-topline">
+                  <span>0{index + 1}</span>
+                  <span>{t.status[tool.status]}</span>
+                </div>
+                <div className="lab-card-copy">
+                  <p className="lab-category">{t.category[tool.category]}</p>
+                  <h2>{copy?.name ?? tool.name}</h2>
+                  <p>{copy?.description ?? tool.description}</p>
+                </div>
+                <div className="lab-card-footer">
+                  <span>{tool.localOnly ? t.runsLocally : t.webUtility}</span>
+                  <ArrowIcon />
+                </div>
+              </Link>
+            </article>
+          );
+        })}
       </section>
       <aside className="lab-principles" aria-label={t.principlesLabel}>
         <p className="eyebrow">{t.principlesEyebrow}</p>

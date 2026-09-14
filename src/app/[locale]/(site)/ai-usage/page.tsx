@@ -35,20 +35,26 @@ export default async function AiUsagePage({
         <h2>Tools</h2>
         <ul className="ai-usage-list">
           <li>
-            <strong>pi.dev</strong> — an AI coding agent that writes, edits,
-            and verifies code in this repository.
+            <strong>pi.dev</strong> — an AI coding agent that writes, edits, and
+            verifies code in this repository.
           </li>
           <li>
             <strong>OpenRouter</strong> — the provider that routes the models
             pi.dev uses.
+          </li>
+          <li>
+            <strong>OmniRoute</strong> — a self-hosted, OpenAI-compatible
+            gateway. The Lab&apos;s Daily Questions tool calls it at runtime to
+            write each day&apos;s question; it is not involved in building this
+            site.
           </li>
         </ul>
 
         <h2>What the AI did</h2>
         <ul className="ai-usage-list">
           <li>
-            Scaffolded the project and implemented most of the application
-            code (Next.js App Router pages, components, styling).
+            Scaffolded the project and implemented most of the application code
+            (Next.js App Router pages, components, styling).
           </li>
           <li>
             Built the Sanity CMS integration: content schema, GROQ queries,
@@ -56,8 +62,8 @@ export default async function AiUsagePage({
             document-level en/id internationalization migration.
           </li>
           <li>
-            Wrote engineering planning documents and internal analysis (kept
-            out of this repository by design).
+            Wrote engineering planning documents and internal analysis (kept out
+            of this repository by design).
           </li>
           <li>
             Debugged issues and ran verification (typecheck, lint, production
@@ -72,12 +78,45 @@ export default async function AiUsagePage({
             typography decisions.
           </li>
           <li>
-            <strong>All published writing</strong> — page copy, journal posts,
-            and this disclosure.
+            <strong>
+              All published writing outside the Daily Questions tool
+            </strong>{" "}
+            — page copy, journal posts, and this disclosure.
           </li>
           <li>
             <strong>Final review</strong> — every change was reviewed before it
             was committed and deployed.
+          </li>
+        </ul>
+
+        <h2>Generated content</h2>
+        <p>
+          There is exactly one place on this site where an AI writes published
+          content rather than code:{" "}
+          <strong>
+            the daily question in the Lab&apos;s Daily Questions tool
+          </strong>
+          .
+        </p>
+        <ul className="ai-usage-list">
+          <li>
+            The question is generated once per UTC day by the model behind
+            OmniRoute, then stored and served to everyone. It is not regenerated
+            per visitor.
+          </li>
+          <li>
+            It appears publicly on the question-of-the-day page and in the
+            question archive, and those pages say so.
+          </li>
+          <li>
+            Knowledge questions carry a model-written answer and explanation.
+            These are checked by hand when read, but not edited before
+            publication, so treat them as machine output that may occasionally
+            be wrong.
+          </li>
+          <li>
+            Everything a person writes inside the tool — everyone&apos;s answers
+            — is private and is never published.
           </li>
         </ul>
 
@@ -92,11 +131,13 @@ export default async function AiUsagePage({
             shows finished, reviewed work rather than raw agent logs.
           </li>
           <li>
-            No AI-generated prose is presented as human-written content.
+            No AI-generated prose is presented as human-written content. The
+            single machine-written surface, the daily question, is labelled as
+            machine-written.
           </li>
         </ul>
 
-        <p className="ai-usage-updated">Last updated: 2026-07-31</p>
+        <p className="ai-usage-updated">Last updated: 2026-09-10</p>
       </div>
     </div>
   );

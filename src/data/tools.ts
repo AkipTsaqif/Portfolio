@@ -31,4 +31,21 @@ export const labTools: LabTool[] = [
     status: "Experimental",
     localOnly: true,
   },
+  {
+    slug: "daily-questions",
+    name: "Daily Questions",
+    description:
+      "One question a day, answered privately, then revealed to each other.",
+    category: "Everyday",
+    status: "Experimental",
+    localOnly: false,
+  },
 ];
+
+/**
+ * Per-slug overrides for the English defaults above.
+ *
+ * The Lab index prefers `dictionary.lab.toolCopy[slug]` when it exists, which is
+ * how the tool cards get translated. This registry stays the English fallback
+ * and the source of truth for the sitemap.
+ */

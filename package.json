@@ -8,10 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "db:migrate": "bun run ./scripts/db-migrate.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "verify:daily-questions": "node ./scripts/verify-daily-questions.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@portabletext/react": "^7.0.1",
     "@portabletext/types": "^4.0.2",
     "@sanity/asset-utils": "^2.3.0",
@@ -29,6 +33,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bun": "^1.4.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

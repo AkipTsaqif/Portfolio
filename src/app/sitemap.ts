@@ -2,10 +2,7 @@ import type { MetadataRoute } from "next";
 import { posts } from "@/data/posts";
 import { projects } from "@/data/projects";
 import { labTools } from "@/data/tools";
-import {
-  locales,
-  localizedPath,
-} from "@/i18n/config";
+import { locales, localizedPath } from "@/i18n/config";
 import { getSanitySlugs } from "@/lib/sanity/fetch";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -72,5 +69,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
-  return [...staticEntries, ...projectEntries, ...blogEntries, ...labEntries];
+  // The public Daily Questions surfaces are real, changing content. Room and join
+  // routes are deliberately absent: they are private and must never be listed.
+  const dailyQuestionEntries: MetadataRoute.Sitemap = locales.flatMap(
+    (locale) => [
+      {
+        url: `${baseUrl}${localizedPath(locale, "/lab/daily-questions/today")}`,
+        changeFrequency: "daily" as const,
+        priority: 0.7,
+      },
+      {
+        url: `${baseUrl}${localizedPath(locale, "/lab/daily-questions/archive")}`,
+        changeFrequency: "daily" as const,
+        priority: 0.6,
+      },
+    ],
+  );
+
+  return [
+    ...staticEntries,
+    ...projectEntries,
+    ...blogEntries,
+    ...labEntries,
+    ...dailyQuestionEntries,
+  ];
 }
