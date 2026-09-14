@@ -141,13 +141,13 @@ function looksLikeLanding(html) {
   return html.includes("dq-config-warning") || html.includes("dq-gate");
 }
 
-const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
+const sql = process.env.DB_URL ? neon(process.env.DB_URL) : null;
 
 if (sql) {
   await sql`delete from rate_limit_events`;
   console.log("rate-limit rows cleared\n");
 } else {
-  console.log("note: DATABASE_URL not set — rate limits are not reset\n");
+  console.log("note: DB_URL not set — rate limits are not reset\n");
 }
 
 // --- 1. create a room through the real action ------------------------------

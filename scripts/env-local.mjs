@@ -2,22 +2,16 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 /**
- * Makes `.env.local` the source of truth, **overriding** anything already in
- * `process.env`.
+ * Loads `.env.local` for scripts that would otherwise not see it.
  *
- * This is deliberately not the default behaviour of either runtime: Bun and Next
- * both leave an existing `process.env` value alone, and Node does not read
- * `.env.local` at all. That means a `DATABASE_URL` exported in your shell silently
- * wins over the one in `.env.local`, and you end up migrating the wrong database
- * without any warning. This was a real incident, not a hypothetical: the tool was
- * pointed at a shared database while `.env.local` named a dedicated one.
+ * Narrow purpose: `next` and `bun` both read `.env.local` themselves, but plain
+ * `node` does not, and `scripts/verify-daily-questions.mjs` has to run under node
+ * (Bun's FormData multipart is rejected by Next's Server Action parser).
  *
- * Scope of the override:
- *   - local development, and any script run from this repo (dev, build, start,
- *     db:migrate, verify)
- *   - it is a no-op wherever `.env.local` does not exist, which is every deployed
- *     environment (the file is gitignored). Production still gets its values from
- *     the platform's own environment variables.
+ * Standard dotenv semantics: **existing values are left alone.** This is not a
+ * mechanism for out-ranking the ambient environment — the reason a stale shell
+ * export used to win is that the variable name was contested, and that is fixed
+ * by the name itself (`DB_URL`), not by overriding anything here.
  */
 export function loadEnvLocal(cwd = process.cwd()) {
   const path = join(cwd, ".env.local");
@@ -33,7 +27,7 @@ export function loadEnvLocal(cwd = process.cwd()) {
     if (separator === -1) continue;
 
     const key = line.slice(0, separator).trim();
-    if (!key) continue;
+    if (!key || process.env[key] !== undefined) continue;
 
     let value = line.slice(separator + 1).trim();
 

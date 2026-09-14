@@ -1,9 +1,4 @@
 import type { NextConfig } from "next";
-import { loadEnvLocal } from "./scripts/env-local.mjs";
-
-// Do not rely on the ambient shell environment: .env.local is the source of truth
-// locally. No-op when the file is absent (i.e. every deployed environment).
-loadEnvLocal();
 
 /**
  * Private routes get `X-Robots-Tag` from the edge as well as `<meta robots>` from

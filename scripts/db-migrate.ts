@@ -10,9 +10,9 @@
  * Neon's own guidance is that schema work belongs on a **direct** connection:
  * the pooled endpoint is PgBouncer in transaction mode, which does not carry
  * session-level state, and DDL is exactly the kind of thing that wants it. So
- * `DIRECT_URL` (Neon's name for it) wins when present and `DATABASE_URL` is the
- * fallback — which is what this script did before, and it worked, because every
- * statement here is self-contained. Being explicit just removes the exception.
+ * `DIRECT_URL` wins when present and `DB_URL` is the fallback — every statement
+ * here is self-contained, so either endpoint works, but being explicit removes
+ * the exception.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -21,12 +21,11 @@ import { loadEnvLocal } from "./env-local.mjs";
 
 loadEnvLocal();
 
-const candidate =
-  process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim();
+const candidate = process.env.DIRECT_URL?.trim() || process.env.DB_URL?.trim();
 
 if (!candidate) {
   console.error(
-    "Missing DIRECT_URL and DATABASE_URL. Add one to .env.local and try again.",
+    "Missing DIRECT_URL and DB_URL. Add one to .env.local and try again.",
   );
   process.exit(1);
 }
