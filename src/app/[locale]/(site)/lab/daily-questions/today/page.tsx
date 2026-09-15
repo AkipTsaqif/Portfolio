@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { QuestionCard } from "@/features/lab/daily-questions/components/question-card";
 import { isDatabaseConfigured } from "@/lib/db/env";
 import { toDailyQuestion } from "@/features/lab/daily-questions/view";
 import { resolveDailyQuestion } from "@/features/lab/daily-questions/questions";
 import { scheduleNextDayPrewarm } from "@/features/lab/daily-questions/prewarm";
+import { notifyQuestionReady } from "@/features/lab/daily-questions/push";
+import { siteUrl } from "@/features/lab/daily-questions/urls";
 import {
   resolveQuestionKind,
   utcToday,
@@ -68,6 +71,12 @@ export default async function TodayPage({
   // Built while this response is already on its way out, so the next UTC day opens
   // without anyone waiting on generation.
   scheduleNextDayPrewarm();
+
+  // The public page can be the first thing anyone opens on a given day, so it carries the
+  // nudge too — gated inside notifyQuestionReady to today, and to a single send.
+  after(async () => {
+    await notifyQuestionReady({ kind, date: today, siteUrl: siteUrl() });
+  });
 
   return (
     <div className="shell page-wrap dq-page dq-page-narrow">

@@ -462,6 +462,95 @@ if (sql) {
   check("the test flag was cleaned up", cleared?.flagged_at === null);
 }
 
+// --- 12. web push ----------------------------------------------------------
+// Real delivery cannot be verified without a browser subscription, and Next's client JS
+// is what calls the subscribe action, so there is no form to replay. What IS verifiable
+// matters most: the worker and manifest are served, the toggle is offered, the day's nudge
+// is claimed exactly once rather than per visitor, and a push endpoint that refuses does
+// not take the page down with it.
+const swResponse = await fetch(`${BASE}/sw.js`);
+const swBody = swResponse.ok ? await swResponse.text() : "";
+check(
+  "the service worker is served",
+  swResponse.status === 200,
+  `${swResponse.status}`,
+);
+check(
+  "it is served as JavaScript",
+  /javascript/.test(swResponse.headers.get("content-type") ?? ""),
+);
+check(
+  "it handles push and notification taps",
+  swBody.includes('addEventListener("push"') &&
+    swBody.includes("notificationclick"),
+);
+
+const manifestResponse = await fetch(`${BASE}/manifest.webmanifest`);
+check(
+  "the web app manifest is served",
+  manifestResponse.status === 200,
+  `${manifestResponse.status}`,
+);
+check("the nudge toggle is offered in the room", /dq-notify/.test(openHtml));
+
+if (sql) {
+  const [member] =
+    await sql`select id from members where display_name = 'VerifyA' and deleted_at is null limit 1`;
+
+  if (member) {
+    // A deliberately unroutable endpoint: delivery fails, which is the point. It must be
+    // counted as a failure rather than throwing into the request.
+    await sql`
+      insert into push_subscriptions (member_id, endpoint, p256dh, auth, created_by)
+      values (${member.id}, 'https://127.0.0.1:9/verify-push',
+              'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM',
+              'tBHItJI5svbpez7KI4CCXg', ${member.id})
+      on conflict (endpoint) where deleted_at is null do nothing`;
+
+    const withSub = await get(ROOM_URL, creatorCookie);
+    check(
+      "the toggle reflects a server-side subscription",
+      /Notifications are on/.test(withSub),
+    );
+
+    await sql`update daily_questions set notified_at = null where date = ${dayDate} and kind = ${dayKind}`;
+    const first = await get(ROOM_URL, creatorCookie);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const [claimed] =
+      await sql`select notified_at from daily_questions where date = ${dayDate} and kind = ${dayKind}`;
+
+    check(
+      "the page still renders when a push endpoint refuses",
+      first.length > 0,
+    );
+    check(
+      "the first render claims the day's nudge",
+      Boolean(claimed?.notified_at),
+    );
+
+    await get(ROOM_URL, creatorCookie);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const [again2] =
+      await sql`select notified_at from daily_questions where date = ${dayDate} and kind = ${dayKind}`;
+    check(
+      "a second render does not claim it again",
+      new Date(again2?.notified_at).getTime() ===
+        new Date(claimed?.notified_at).getTime(),
+    );
+
+    // leave no trace: the test subscription goes, and the day's slot reopens
+    await sql`delete from push_subscriptions where endpoint = 'https://127.0.0.1:9/verify-push'`;
+    await sql`update daily_questions set notified_at = null where date = ${dayDate} and kind = ${dayKind}`;
+    const [clean] =
+      await sql`select count(*)::int as n from push_subscriptions`;
+    check(
+      "the test subscription was cleaned up",
+      clean?.n === 0,
+      `${clean?.n} remaining`,
+    );
+  }
+}
+
 // --- report ---------------------------------------------------------------
 console.log("");
 console.table(results);

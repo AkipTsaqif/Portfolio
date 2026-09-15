@@ -112,3 +112,30 @@ export function hasGateway(): boolean {
 export function isDailyQuestionsConfigured(): boolean {
   return hasDatabase() && hasGateway();
 }
+
+/**
+ * VAPID keys for web push.
+ *
+ * Generated once (`webpush.generateVAPIDKeys()`), then set as environment variables. The
+ * public key is handed to the browser so it can subscribe; the private key signs the push
+ * and never leaves the server. `subject` is a contact URI that push services are required
+ * to have on file, per the VAPID spec.
+ *
+ * Returns null when any part is missing, which switches notifications off rather than
+ * failing — the tool works fine without them, it just cannot nudge anyone.
+ */
+export type VapidConfig = {
+  publicKey: string;
+  privateKey: string;
+  subject: string;
+};
+
+export function getVapid(): VapidConfig | null {
+  const publicKey = process.env.VAPID_PUBLIC_KEY?.trim();
+  const privateKey = process.env.VAPID_PRIVATE_KEY?.trim();
+  const subject = process.env.VAPID_SUBJECT?.trim();
+
+  if (!publicKey || !privateKey || !subject) return null;
+
+  return { publicKey, privateKey, subject };
+}

@@ -50,6 +50,8 @@ create table if not exists daily_questions (
   flagged_at    timestamptz,
   flagged_by    uuid,
   flag_note     text check (flag_note is null or char_length(flag_note) <= 280),
+  -- when the "today's question is ready" nudge went out, so it goes out exactly once
+  notified_at   timestamptz,
   created_by    uuid,
   created_at    timestamptz not null default now(),
   updated_by    uuid,
@@ -86,6 +88,11 @@ alter table daily_questions
 alter table daily_questions
   add column if not exists flag_note text
   check (flag_note is null or char_length(flag_note) <= 280);
+
+-- @@
+
+alter table daily_questions
+  add column if not exists notified_at timestamptz;
 
 -- @@
 
@@ -148,6 +155,41 @@ create unique index if not exists members_room_name_key
 
 create index if not exists members_room_idx
   on members (room_id, joined_at)
+  where deleted_at is null;
+
+-- @@
+
+-- One row per browser that agreed to be nudged. A push subscription is an opaque
+-- endpoint plus two keys — no third party, no email, nothing that identifies a person
+-- beyond the member it belongs to, which is the same privacy stance as the rest of the
+-- tool. The private VAPID key never reaches here.
+create table if not exists push_subscriptions (
+  id         uuid primary key default gen_random_uuid(),
+  member_id  uuid not null references members(id) on delete cascade,
+  endpoint   text not null,
+  p256dh     text not null,
+  auth       text not null,
+  user_agent text,
+  created_by uuid,
+  created_at timestamptz not null default now(),
+  updated_by uuid,
+  updated_at timestamptz not null default now(),
+  deleted_by uuid,
+  deleted_at timestamptz
+);
+
+-- @@
+
+-- the endpoint is the browser's identity: re-subscribing on the same browser returns the
+-- same one, so this is what makes subscribing idempotent
+create unique index if not exists push_subscriptions_endpoint_key
+  on push_subscriptions (endpoint)
+  where deleted_at is null;
+
+-- @@
+
+create index if not exists push_subscriptions_member_idx
+  on push_subscriptions (member_id)
   where deleted_at is null;
 
 -- @@
@@ -280,4 +322,13 @@ drop trigger if exists rate_limit_events_touch on rate_limit_events;
 -- @@
 
 create trigger rate_limit_events_touch before update on rate_limit_events
+  for each row execute function dq_touch_updated_at();
+
+-- @@
+
+drop trigger if exists push_subscriptions_touch on push_subscriptions;
+
+-- @@
+
+create trigger push_subscriptions_touch before update on push_subscriptions
   for each row execute function dq_touch_updated_at();

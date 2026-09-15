@@ -31,6 +31,7 @@ function questionRow(
     flagged_at: null,
     flagged_by: null,
     flag_note: null,
+    notified_at: null,
     created_by: null,
     created_at: "2026-09-11T00:00:01.000Z",
     updated_by: null,

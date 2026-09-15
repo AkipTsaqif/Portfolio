@@ -415,6 +415,17 @@
       },
       "latencyLabel": "Response",
       "note": "Public but deliberately not indexed. Error text is never shown, only whether each dependency answered."
+    },
+    "notify": {
+      "title": "Nudges",
+      "description": "A notification when the day's question is ready, or when the other person has answered. Your browser talks to its own push service, and the question text is never included — the nudge says only that there is something to read.",
+      "enable": "Turn on notifications",
+      "disable": "Turn off",
+      "enabled": "Notifications are on",
+      "blocked": "Notifications are blocked for this site. Allow them in your browser settings, then try again.",
+      "unsupported": "This browser cannot receive them. On an iPhone or iPad, add this site to your Home Screen first, then come back.",
+      "working": "Working…",
+      "failed": "Could not turn notifications on. Try again."
     }
   }
 }

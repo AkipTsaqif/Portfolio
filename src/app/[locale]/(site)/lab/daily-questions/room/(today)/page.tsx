@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { after } from "next/server";
 import { DayView } from "@/features/lab/daily-questions/components/day-view";
 import { InviteLink } from "@/features/lab/daily-questions/components/invite-link";
+import { NotifyToggle } from "@/features/lab/daily-questions/components/notify-toggle";
 import { RoomSettings } from "@/features/lab/daily-questions/components/room-settings";
 import { StreakStrip } from "@/features/lab/daily-questions/components/streak-strip";
 import { formatRoomCode } from "@/features/lab/daily-questions/code";
@@ -12,8 +14,13 @@ import {
 } from "@/features/lab/daily-questions/service";
 import { getSession } from "@/features/lab/daily-questions/session";
 import { scheduleNextDayPrewarm } from "@/features/lab/daily-questions/prewarm";
+import {
+  getVapidPublicKey,
+  notifyQuestionReady,
+} from "@/features/lab/daily-questions/push";
+import { hasPushSubscription } from "@/features/lab/daily-questions/room";
 import { utcToday } from "@/features/lab/daily-questions/utc-day";
-import { inviteUrl } from "@/features/lab/daily-questions/urls";
+import { inviteUrl, siteUrl } from "@/features/lab/daily-questions/urls";
 import { isLocale, localizedPath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
@@ -53,13 +60,25 @@ export default async function RoomPage({
   const { room, member } = session;
   const today = utcToday();
 
-  const [{ members, stats }, day] = await Promise.all([
+  const [{ members, stats }, day, subscribed] = await Promise.all([
     getRoomContext(room, member.id),
     buildRoomDay({ room, memberId: member.id, date: today, locale }),
+    hasPushSubscription(member.id),
   ]);
 
   // Built after this response is sent, so tomorrow opens without a wait.
   scheduleNextDayPrewarm();
+
+  // Announce the day's question, exactly once. The claim inside notifyQuestionReady is a
+  // conditional UPDATE on `notified_at`, so the first visitor of the day sends it and the
+  // next does not — which is what makes it safe to trigger from a page render at all.
+  after(async () => {
+    await notifyQuestionReady({
+      kind: day.kind,
+      date: day.date,
+      siteUrl: siteUrl(),
+    });
+  });
 
   const formattedCode = formatRoomCode(room.code);
 
@@ -99,6 +118,11 @@ export default async function RoomPage({
           {t.archive.metaTitle} →
         </Link>
       </nav>
+
+      <NotifyToggle
+        subscribedOnServer={subscribed}
+        vapidPublicKey={getVapidPublicKey()}
+      />
 
       <InviteLink
         code={room.code}

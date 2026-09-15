@@ -24,6 +24,10 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|studio|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|rss.xml|pdf.worker.min.mjs).*)",
+    // Root-level files must not be locale-prefixed. `sw.js` is the important one: a service
+    // worker's scope is set by its own path, so serving it from `/en/sw.js` would confine it to
+    // `/en/` and it could not control the app. `manifest.webmanifest` is read by the browser
+    // before any navigation, and a redirect there is not something it follows.
+    "/((?!api|studio|_next/static|_next/image|sw.js|manifest.webmanifest|favicon.ico|sitemap.xml|robots.txt|rss.xml|pdf.worker.min.mjs).*)",
   ],
 };

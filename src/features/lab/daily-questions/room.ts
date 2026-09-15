@@ -512,6 +512,17 @@ export async function getAnswerDays(options: {
   return byDate;
 }
 
+/** Whether this member has a live push subscription, for the toggle's initial state. */
+export async function hasPushSubscription(memberId: string): Promise<boolean> {
+  const result = await db()`
+    select id from push_subscriptions
+     where member_id = ${memberId} and deleted_at is null
+     limit 1
+  `;
+
+  return firstRow<{ id: string }>(result) !== null;
+}
+
 /** Every date a member answered, for streak math. */
 export async function getMemberAnswerDates(
   memberId: string,

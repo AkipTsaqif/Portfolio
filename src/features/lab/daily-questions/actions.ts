@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { isLocale, localizedPath, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import type { QuestionKind, RoomMode } from "@/lib/db/types";
@@ -34,6 +35,8 @@ import {
   createRoomSchema,
   flagQuestionSchema,
   joinRoomSchema,
+  pushSubscriptionSchema,
+  removePushSubscriptionSchema,
   retractAnswerSchema,
   setQuestionModeSchema,
   submitAnswerSchema,
@@ -45,6 +48,12 @@ import {
   getSession,
   writeDeviceCookie,
 } from "./session";
+import {
+  notifyAnswerSubmitted,
+  removeSubscription,
+  saveSubscription,
+} from "./push";
+import { siteUrl } from "./urls";
 import { resolveQuestionKind, utcToday } from "./utc-day";
 
 /**
@@ -334,6 +343,19 @@ export async function submitAnswerAction(
     return actionError(t.errors.alreadyAnswered);
   }
 
+  // Tell the room someone answered. Scheduled rather than awaited: a nudge that fails must
+  // never turn a successful answer into an error. Gated to today inside notifyAnswerSubmitted.
+  after(async () => {
+    await notifyAnswerSubmitted({
+      roomId: room.id,
+      memberId: member.id,
+      memberName: member.display_name,
+      kind: expected,
+      date: today,
+      siteUrl: siteUrl(),
+    });
+  });
+
   revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));
   return actionNotice(t.notices.answerLocked);
 }
@@ -388,6 +410,70 @@ export async function flagQuestionAction(formData: FormData): Promise<void> {
     date: parsed.data.date,
     memberId: session.member.id,
     note: parsed.data.note ?? null,
+  });
+
+  revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));
+}
+
+// --- notifications ---------------------------------------------------------
+
+/**
+ * Stores a browser push subscription.
+ *
+ * Returns state rather than void, unlike the other plain actions: the client has just done
+ * real work in the browser (permission, subscribe) and needs to know whether the server
+ * actually kept it. A subscription that exists only in the browser delivers nothing, and
+ * the reader would have no way to tell.
+ */
+export async function savePushSubscriptionAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const guard = await requireSessionOr(formData, {
+    error: null,
+    notice: null,
+    ok: false,
+  });
+  if ("state" in guard) return guard.state;
+
+  const t = await dictionaryFor(formData);
+  const parsed = pushSubscriptionSchema.safeParse({
+    endpoint: field(formData, "endpoint"),
+    p256dh: field(formData, "p256dh"),
+    auth: field(formData, "auth"),
+    userAgent: optionalField(formData, "userAgent"),
+  });
+
+  if (!parsed.success) return actionError(t.errors.invalidInput);
+
+  await saveSubscription({
+    memberId: guard.session.member.id,
+    endpoint: parsed.data.endpoint,
+    p256dh: parsed.data.p256dh,
+    auth: parsed.data.auth,
+    userAgent: parsed.data.userAgent ?? null,
+  });
+
+  revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));
+  return { error: null, notice: null, ok: true };
+}
+
+/** Removing is idempotent, so this one is a plain form action. */
+export async function removePushSubscriptionAction(
+  formData: FormData,
+): Promise<void> {
+  const session = await getSession();
+  if (!session) return;
+
+  const parsed = removePushSubscriptionSchema.safeParse({
+    endpoint: field(formData, "endpoint"),
+  });
+
+  if (!parsed.success) return;
+
+  await removeSubscription({
+    memberId: session.member.id,
+    endpoint: parsed.data.endpoint,
   });
 
   revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));

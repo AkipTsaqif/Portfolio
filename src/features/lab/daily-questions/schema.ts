@@ -140,6 +140,36 @@ export const flagQuestionSchema = z.object({
   note: z.string().trim().max(280).optional(),
 });
 
+/**
+ * A push subscription as the browser reports it. The endpoint is a URL on the browser
+ * vendor's push service, so it is validated as one rather than trusted as an opaque blob —
+ * it is the one field here that gets a request sent to it.
+ */
+export const pushSubscriptionSchema = z.object({
+  endpoint: z
+    .string()
+    .trim()
+    .max(1000)
+    .refine(
+      (value) => {
+        try {
+          new URL(value);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: "Expected a push endpoint URL." },
+    ),
+  p256dh: z.string().trim().min(20).max(200),
+  auth: z.string().trim().min(8).max(100),
+  userAgent: z.string().trim().max(200).optional(),
+});
+
+export const removePushSubscriptionSchema = z.object({
+  endpoint: z.string().trim().min(8).max(1000),
+});
+
 export const calendarMonthSchema = z.object({
   month: z.string().refine((value) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value), {
     message: "Expected a YYYY-MM month.",

@@ -2995,3 +2995,35 @@ button:focus-visible {
   margin-top: 40px;
   padding-top: 16px;
 }
+
+/* nudges: a room-level setting, so it sits with the other room controls rather than
+   competing with the question */
+.dq-notify {
+  border-top: 1px solid var(--line);
+  margin-top: 70px;
+  padding-top: 18px;
+}
+.dq-notify-copy {
+  margin: 12px 0 18px;
+  max-width: 54ch;
+}
+.dq-notify-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.dq-notify-state {
+  align-items: center;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 8px;
+}
+.dq-notify-state::before {
+  background: #9dbb2a;
+  border-radius: 50%;
+  content: "";
+  height: 7px;
+  width: 7px;
+}

@@ -415,6 +415,17 @@
       },
       "latencyLabel": "Respons",
       "note": "Publik tetapi sengaja tidak diindeks. Teks galat tidak pernah ditampilkan, hanya apakah tiap dependensi menjawab."
+    },
+    "notify": {
+      "title": "Notifikasi",
+      "description": "Notifikasi saat pertanyaan hari ini siap, atau saat pasanganmu sudah menjawab. Perambanmu menghubungi layanan push-nya sendiri, dan teks pertanyaan tidak pernah disertakan — notifikasinya hanya memberi tahu bahwa ada yang bisa dibaca.",
+      "enable": "Nyalakan notifikasi",
+      "disable": "Matikan",
+      "enabled": "Notifikasi aktif",
+      "blocked": "Notifikasi diblokir untuk situs ini. Izinkan di pengaturan peramban, lalu coba lagi.",
+      "unsupported": "Peramban ini tidak bisa menerimanya. Di iPhone atau iPad, tambahkan situs ini ke Layar Utama dulu, lalu kembali ke sini.",
+      "working": "Memproses…",
+      "failed": "Gagal menyalakan notifikasi. Coba lagi."
     }
   }
 }

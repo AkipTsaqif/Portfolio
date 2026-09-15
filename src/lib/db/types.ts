@@ -28,6 +28,7 @@ export type DailyQuestionRow = {
   flagged_at: string | null;
   flagged_by: string | null;
   flag_note: string | null;
+  notified_at: string | null;
   created_by: string | null;
   created_at: string;
   updated_by: string | null;
@@ -70,6 +71,21 @@ export type AnswerRow = {
   question_date: string;
   question_kind: QuestionKind;
   body: string;
+  created_by: string | null;
+  created_at: string;
+  updated_by: string | null;
+  updated_at: string;
+  deleted_by: string | null;
+  deleted_at: string | null;
+};
+
+export type PushSubscriptionRow = {
+  id: string;
+  member_id: string;
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+  user_agent: string | null;
   created_by: string | null;
   created_at: string;
   updated_by: string | null;
