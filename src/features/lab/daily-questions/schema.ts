@@ -133,6 +133,13 @@ export const setQuestionModeSchema = z.object({
   mode: roomModeSchema,
 });
 
+/** Note is optional: a reader should be able to say "this is wrong" in one click. */
+export const flagQuestionSchema = z.object({
+  date: dateStringSchema,
+  kind: questionKindSchema,
+  note: z.string().trim().max(280).optional(),
+});
+
 export const calendarMonthSchema = z.object({
   month: z.string().refine((value) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value), {
     message: "Expected a YYYY-MM month.",

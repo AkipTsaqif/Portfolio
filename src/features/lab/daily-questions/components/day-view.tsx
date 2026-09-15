@@ -1,7 +1,10 @@
 import type { Copy } from "../copy";
 import type { RoomDayView } from "../types";
+import { initialActionState } from "../action-state";
+import { flagQuestionAction } from "../actions";
 import { AnswerCard, AnswerKey } from "./answer-card";
 import { AnswerForm } from "./answer-form";
+import { ConfirmSubmit } from "./confirm-submit";
 import { QuestionCard, QuestionUnavailable } from "./question-card";
 
 /**
@@ -30,6 +33,35 @@ export function DayView({
   return (
     <>
       <QuestionCard copy={copy} heading={heading} question={day.question} />
+
+      {/*
+       * The one unmitigated risk in a design that publishes model-written questions to an
+       * indexed page is that nobody checks them. This is the check.
+       */}
+      {day.questionFlagged ? (
+        <p className="dq-note dq-flag-state">{t.questionFlagged}</p>
+      ) : (
+        <details className="dq-flag">
+          <summary>{t.flagQuestion}</summary>
+          <form action={flagQuestionAction}>
+            <input name="locale" type="hidden" value={locale} />
+            <input name="date" type="hidden" value={day.date} />
+            <input name="kind" type="hidden" value={day.kind} />
+            <label className="dq-label" htmlFor="dq-flag-note">
+              {t.flagNoteLabel}
+            </label>
+            <textarea
+              className="dq-textarea dq-textarea-short"
+              id="dq-flag-note"
+              maxLength={280}
+              name="note"
+              placeholder={t.flagNotePlaceholder}
+              rows={3}
+            />
+            <ConfirmSubmit label={t.flagSubmit} message={t.flagConfirm} />
+          </form>
+        </details>
+      )}
 
       {!day.meAnswered && day.isToday ? (
         <AnswerForm date={day.date} kind={day.kind} />

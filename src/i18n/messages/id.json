@@ -321,7 +321,13 @@
       "removeReaction": "Hapus reaksi",
       "answers": "Jawaban",
       "missedDay": "Kamu tidak menjawab hari itu, jadi jawaban mereka tetap tersegel.",
-      "theirReactions": "Reaksi mereka"
+      "theirReactions": "Reaksi mereka",
+      "flagQuestion": "Ada yang salah dengan pertanyaan ini?",
+      "flagNoteLabel": "Apa yang salah? (opsional)",
+      "flagNotePlaceholder": "Jawabannya sudah tidak berlaku, atau pertanyaannya ambigu…",
+      "flagSubmit": "Tandai pertanyaan ini",
+      "flagConfirm": "Tandai pertanyaan ini? Pertanyaan berikutnya akan menghindari topik ini. Pertanyaan hari ini tetap seperti adanya, karena bisa jadi sudah ada yang menjawabnya.",
+      "questionFlagged": "Sudah ditandai. Pertanyaan berikutnya akan menghindari topik ini."
     },
     "calendar": {
       "title": "Kalender",

@@ -71,6 +71,8 @@ export type RoomDayView = {
   question: DailyQuestion | null;
   /** True when generation failed and no fallback could be resolved either. */
   questionUnavailable: boolean;
+  /** A reader has marked this question as wrong; future questions avoid its topic. */
+  questionFlagged: boolean;
   meAnswered: boolean;
   entries: DayAnswerView[];
   /** Only populated once the reader has answered a knowledge question. */

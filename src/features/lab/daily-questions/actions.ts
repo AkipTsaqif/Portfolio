@@ -14,7 +14,7 @@ import {
   ROOM_JOIN_WINDOW_SECONDS,
   hasDatabase,
 } from "./env";
-import { resolveDailyQuestion } from "./questions";
+import { resolveDailyQuestion, flagQuestion } from "./questions";
 import {
   DeviceAlreadyInAnotherRoom,
   DisplayNameTaken,
@@ -32,6 +32,7 @@ import {
 } from "./room";
 import {
   createRoomSchema,
+  flagQuestionSchema,
   joinRoomSchema,
   retractAnswerSchema,
   setQuestionModeSchema,
@@ -356,6 +357,37 @@ export async function retractAnswerAction(formData: FormData): Promise<void> {
     memberId: session.member.id,
     date: parsed.data.date,
     kind: parsed.data.kind as QuestionKind,
+  });
+
+  revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));
+}
+
+// --- flagging ------------------------------------------------------------
+
+/**
+ * Marks the day's question as wrong. A plain form action rather than a state-returning one:
+ * the re-render shows the new state, so there is nothing to report back, and a reader
+ * should be able to register "this is wrong" in one click without being asked why.
+ */
+export async function flagQuestionAction(formData: FormData): Promise<void> {
+  const session = await getSession();
+  if (!session) return;
+
+  const parsed = flagQuestionSchema.safeParse({
+    date: field(formData, "date"),
+    kind: field(formData, "kind"),
+    note: optionalField(formData, "note"),
+  });
+
+  if (!parsed.success) return;
+
+  // The question is deliberately not regenerated: it has already been shown and may already
+  // have answers against it. The flag shapes future questions instead.
+  await flagQuestion({
+    kind: parsed.data.kind as QuestionKind,
+    date: parsed.data.date,
+    memberId: session.member.id,
+    note: parsed.data.note ?? null,
   });
 
   revalidatePath(localizedPath(await localeFrom(formData), ROOM_PATH));

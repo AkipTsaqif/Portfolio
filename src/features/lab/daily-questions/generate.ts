@@ -59,6 +59,7 @@ function buildUserPrompt(
   kind: QuestionKind,
   date: string,
   recentPrompts: string[],
+  avoidTopics: string[],
 ): string {
   const lines = [
     `kind: ${kind}`,
@@ -74,6 +75,17 @@ function buildUserPrompt(
       "",
       "Recent questions. Do not repeat, rephrase or stay on the same fact:",
       ...recentPrompts.map((prompt) => `- ${prompt}`),
+    );
+  }
+
+  // Kept separate from the recent list on purpose. "Recent" is a rolling window, so a
+  // question a reader rejected would otherwise become fair game again once it aged out.
+  // These are excluded permanently.
+  if (avoidTopics.length > 0) {
+    lines.push(
+      "",
+      "A reader marked these as wrong or unusable. Avoid their subject matter entirely:",
+      ...avoidTopics.map((prompt) => `- ${prompt}`),
     );
   }
 
@@ -146,8 +158,10 @@ export async function generateQuestion(options: {
   kind: QuestionKind;
   date: string;
   recentPrompts: string[];
+  /** Questions a reader rejected. Excluded permanently, not just from the recent window. */
+  avoidTopics?: string[];
 }): Promise<GenerationResult> {
-  const { kind, date, recentPrompts } = options;
+  const { kind, date, recentPrompts, avoidTopics = [] } = options;
   const config = getOmniRouteConfig();
 
   if (!config.configured) {
@@ -164,6 +178,7 @@ export async function generateQuestion(options: {
           kind,
           date,
           recentPrompts.slice(0, ANTI_REPEAT_WINDOW),
+          avoidTopics.slice(0, ANTI_REPEAT_WINDOW),
         ),
       },
     ],

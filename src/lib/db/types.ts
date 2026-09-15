@@ -25,6 +25,9 @@ export type DailyQuestionRow = {
   difficulty: Difficulty | null;
   source: QuestionSource;
   model: string | null;
+  flagged_at: string | null;
+  flagged_by: string | null;
+  flag_note: string | null;
   created_by: string | null;
   created_at: string;
   updated_by: string | null;

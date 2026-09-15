@@ -96,6 +96,7 @@ export async function buildRoomDay(options: {
     kind,
     question,
     questionUnavailable: question === null,
+    questionFlagged: questionRow?.flagged_at != null,
     meAnswered: day.meAnswered,
     entries: assembleEntries(
       day.entries,

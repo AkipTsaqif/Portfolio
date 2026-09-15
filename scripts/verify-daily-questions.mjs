@@ -227,6 +227,11 @@ const answerFields = formFields(roomForCreator, 'id="dq-answer"');
 const CREATOR_MARKER = "VERIFY-MARKER-CREATOR";
 
 check("an unanswered room offers the answer box", answerFields !== null);
+
+// Captured here because the flag step needs them, and because a crashed earlier run can
+// leave the question flagged — which hides the flag form and would otherwise cascade.
+const dayDate = answerFields?.get("date") ?? "";
+const dayKind = answerFields?.get("kind") ?? "reflective";
 if (!answerFields) {
   console.log(
     "\nno answer box; room said:",
@@ -373,6 +378,89 @@ check(
   roomHeaders.status === 307 || roomHeaders.status === 302,
   `${roomHeaders.status}`,
 );
+
+// --- 11. flagging a question as wrong --------------------------------------
+// Flagging today's real question during a test would leave a permanent mark on live
+// content, so this flags, asserts, and then clears the columns directly.
+//
+// Defensive clear first: the first run of this step flagged the question and then died
+// before cleanup, which left the form hidden and made the next run fail for the wrong
+// reason — the code was fine, the residue was not.
+if (sql) {
+  await sql`
+    update daily_questions
+       set flagged_at = null, flagged_by = null, flag_note = null
+     where date = ${dayDate} and kind = ${dayKind}`;
+}
+
+const roomBeforeFlag = await get(ROOM_URL, creatorCookie);
+const flagFields = formFields(roomBeforeFlag, 'id="dq-flag-note"');
+const flaggedKind = dayKind;
+const flaggedDate = dayDate;
+check("the flag control is offered while unflagged", flagFields !== null);
+flagFields?.set("note", "VERIFY: deliberate test flag");
+flagFields?.set("locale", "en");
+
+const flagged = await post(ROOM_URL, flagFields, creatorCookie);
+const afterFlag = await get(ROOM_URL, creatorCookie);
+
+check(
+  "flagQuestionAction accepts the flag",
+  flagged.status === 200,
+  `${flagged.status}`,
+);
+check("the room shows the flagged state", /dq-flag-state/.test(afterFlag));
+check(
+  "the flag form is gone once flagged",
+  !/id="dq-flag-note"/.test(afterFlag),
+);
+
+if (sql) {
+  const [row] = await sql`
+    select flagged_at, flagged_by, flag_note from daily_questions
+     where date = ${flaggedDate} and kind = ${flaggedKind}`;
+
+  check("the flag was persisted", Boolean(row?.flagged_at));
+  check(
+    "the note was stored",
+    row?.flag_note === "VERIFY: deliberate test flag",
+    String(row?.flag_note),
+  );
+  check("the flag records who set it", Boolean(row?.flagged_by));
+
+  // first flag wins: a second member, or a second press, must not overwrite it
+  const secondNote = formFields(roomBeforeFlag, 'id="dq-flag-note"');
+  secondNote?.set("note", "VERIFY: second flag, should be ignored");
+  secondNote?.set("locale", "en");
+  await post(ROOM_URL, secondNote, partnerCookie);
+
+  const [again] = await sql`
+    select flag_note from daily_questions where date = ${flaggedDate} and kind = ${flaggedKind}`;
+  check(
+    "a second flag does not overwrite the first",
+    again?.flag_note === "VERIFY: deliberate test flag",
+    String(again?.flag_note),
+  );
+
+  // the avoid list the generator is fed: flagged prompts, independent of the rolling
+  // recent-questions window, so a rejected topic cannot come back in a month
+  const avoid = await sql`
+    select prompt_en from daily_questions
+     where kind = ${flaggedKind} and flagged_at is not null and prompt_en is not null`;
+  check(
+    "the flagged prompt reaches the avoid list",
+    avoid.length >= 1,
+    `${avoid.length} prompt(s)`,
+  );
+
+  await sql`
+    update daily_questions
+       set flagged_at = null, flagged_by = null, flag_note = null
+     where date = ${flaggedDate} and kind = ${flaggedKind}`;
+  const [cleared] = await sql`
+    select flagged_at from daily_questions where date = ${flaggedDate} and kind = ${flaggedKind}`;
+  check("the test flag was cleaned up", cleared?.flagged_at === null);
+}
 
 // --- report ---------------------------------------------------------------
 console.log("");

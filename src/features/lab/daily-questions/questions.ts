@@ -126,6 +126,56 @@ async function recentPrompts(kind: QuestionKind, before: string) {
 }
 
 /**
+ * Questions a reader marked as wrong, excluded from generation permanently.
+ *
+ * Deliberately NOT the same list as `recentPrompts`: that window rolls, so a rejected
+ * question would quietly become available again a month later. These do not expire.
+ */
+async function flaggedPrompts(kind: QuestionKind) {
+  const result = await db()`
+    select prompt_en from daily_questions
+     where kind = ${kind}
+       and flagged_at is not null
+       and deleted_at is null
+       and prompt_en is not null
+     order by flagged_at desc
+     limit ${ANTI_REPEAT_WINDOW}
+  `;
+
+  return rows<{ prompt_en: string }>(result).map((row) => row.prompt_en);
+}
+
+/**
+ * Marks a question as wrong. First flag wins: a second member flagging the same question
+ * keeps the original attribution and note rather than overwriting them, which makes the
+ * action idempotent and the button safe to press twice.
+ *
+ * No regeneration. The question has already been shown, and someone may have answered it —
+ * swapping it mid-day would orphan their answer. The flag's job is to shape what comes next.
+ */
+export async function flagQuestion(options: {
+  kind: QuestionKind;
+  date: string;
+  memberId: string;
+  note: string | null;
+}): Promise<boolean> {
+  const { kind, date, memberId, note } = options;
+
+  const result = await db()`
+    update daily_questions
+       set flagged_at = coalesce(flagged_at, now()),
+           flagged_by = coalesce(flagged_by, ${memberId}),
+           flag_note = coalesce(flag_note, ${note})
+     where date = ${date}
+       and kind = ${kind}
+       and deleted_at is null
+    returning date
+  `;
+
+  return firstRow<{ date: string }>(result) !== null;
+}
+
+/**
  * Generates and publishes a question.
  *
  * `allowFallback: false` is used by the pre-warm path, and the distinction matters: the
@@ -144,6 +194,7 @@ async function generateAndPublish(
     kind,
     date,
     recentPrompts: await recentPrompts(kind, date),
+    avoidTopics: await flaggedPrompts(kind),
   });
 
   if (result.ok) {

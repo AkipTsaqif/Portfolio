@@ -2962,3 +2962,36 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* flagging a question that is wrong: a disclosure so it stays out of the way until
+   someone actually needs it, and a quiet state once flagged */
+.dq-flag {
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+  padding-top: 16px;
+}
+.dq-flag summary {
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.dq-flag form {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  max-width: 34rem;
+}
+.dq-flag .dq-button {
+  justify-self: start;
+}
+.dq-textarea-short {
+  min-height: 84px;
+}
+.dq-flag-state {
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+  padding-top: 16px;
+}

@@ -44,6 +44,12 @@ create table if not exists daily_questions (
   source        text        not null default 'pending'
                 check (source in ('pending', 'omniroute', 'fallback')),
   model         text,
+  -- a reader said this question was wrong. Kept permanently and fed back into generation
+  -- as a topic to avoid, so one bad question does not recur a month later when it would
+  -- otherwise have aged out of the recent-questions window.
+  flagged_at    timestamptz,
+  flagged_by    uuid,
+  flag_note     text check (flag_note is null or char_length(flag_note) <= 280),
   created_by    uuid,
   created_at    timestamptz not null default now(),
   updated_by    uuid,
@@ -62,6 +68,31 @@ create table if not exists daily_questions (
     or (answer_en is not null and answer_id is not null)
   )
 );
+
+-- @@
+
+-- Columns added after the table shipped. `create table if not exists` above does nothing
+-- to an existing table, so each addition needs its own idempotent statement.
+alter table daily_questions
+  add column if not exists flagged_at timestamptz;
+
+-- @@
+
+alter table daily_questions
+  add column if not exists flagged_by uuid;
+
+-- @@
+
+alter table daily_questions
+  add column if not exists flag_note text
+  check (flag_note is null or char_length(flag_note) <= 280);
+
+-- @@
+
+-- flagged prompts are read on every generation, so keep them cheap to find
+create index if not exists daily_questions_flagged_idx
+  on daily_questions (kind, date desc)
+  where flagged_at is not null;
 
 -- @@
 

@@ -321,7 +321,13 @@
       "removeReaction": "Remove reaction",
       "answers": "Answers",
       "missedDay": "You did not answer this day, so their answers stay sealed.",
-      "theirReactions": "Their reaction"
+      "theirReactions": "Their reaction",
+      "flagQuestion": "Something wrong with this question?",
+      "flagNoteLabel": "What's wrong? (optional)",
+      "flagNotePlaceholder": "The answer is out of date, or the question is ambiguous…",
+      "flagSubmit": "Flag this question",
+      "flagConfirm": "Flag this question? Future questions will avoid this subject. Today's question stays as it is, because someone may already have answered it.",
+      "questionFlagged": "Flagged. Future questions will avoid this subject."
     },
     "calendar": {
       "title": "Calendar",
