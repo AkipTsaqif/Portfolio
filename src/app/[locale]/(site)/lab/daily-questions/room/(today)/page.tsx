@@ -11,6 +11,7 @@ import {
   getRoomContext,
 } from "@/features/lab/daily-questions/service";
 import { getSession } from "@/features/lab/daily-questions/session";
+import { scheduleNextDayPrewarm } from "@/features/lab/daily-questions/prewarm";
 import { utcToday } from "@/features/lab/daily-questions/utc-day";
 import { inviteUrl } from "@/features/lab/daily-questions/urls";
 import { isLocale, localizedPath } from "@/i18n/config";
@@ -56,6 +57,9 @@ export default async function RoomPage({
     getRoomContext(room, member.id),
     buildRoomDay({ room, memberId: member.id, date: today, locale }),
   ]);
+
+  // Built after this response is sent, so tomorrow opens without a wait.
+  scheduleNextDayPrewarm();
 
   const formattedCode = formatRoomCode(room.code);
 

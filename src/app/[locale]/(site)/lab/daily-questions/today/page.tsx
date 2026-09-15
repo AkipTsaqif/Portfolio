@@ -5,6 +5,7 @@ import { QuestionCard } from "@/features/lab/daily-questions/components/question
 import { isDatabaseConfigured } from "@/lib/db/env";
 import { toDailyQuestion } from "@/features/lab/daily-questions/view";
 import { resolveDailyQuestion } from "@/features/lab/daily-questions/questions";
+import { scheduleNextDayPrewarm } from "@/features/lab/daily-questions/prewarm";
 import {
   resolveQuestionKind,
   utcToday,
@@ -63,6 +64,10 @@ export default async function TodayPage({
     : null;
 
   const view = toDailyQuestion(question, locale);
+
+  // Built while this response is already on its way out, so the next UTC day opens
+  // without anyone waiting on generation.
+  scheduleNextDayPrewarm();
 
   return (
     <div className="shell page-wrap dq-page dq-page-narrow">

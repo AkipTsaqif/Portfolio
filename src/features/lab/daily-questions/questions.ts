@@ -125,9 +125,20 @@ async function recentPrompts(kind: QuestionKind, before: string) {
   return rows<{ prompt_en: string }>(result).map((row) => row.prompt_en);
 }
 
+/**
+ * Generates and publishes a question.
+ *
+ * `allowFallback: false` is used by the pre-warm path, and the distinction matters: the
+ * standby bank exists so a *person* never sees nothing. Nobody is waiting on a pre-warm,
+ * so a failure there should leave the day ungenerated and let the first real request try
+ * again — not publish a hand-written question 24 hours early and permanently lock the day
+ * into it. That is exactly what happened the first time this ran: both kinds timed out and
+ * tomorrow was silently committed to the standby bank before it had even started.
+ */
 async function generateAndPublish(
   kind: QuestionKind,
   date: string,
+  options: { allowFallback: boolean } = { allowFallback: true },
 ): Promise<DailyQuestionRow | null> {
   const result = await generateQuestion({
     kind,
@@ -141,6 +152,16 @@ async function generateAndPublish(
       `[daily-questions] generated ${date}/${kind} via ${result.model}`,
     );
     return publish(kind, date, result.question, "omniroute", result.model);
+  }
+
+  if (!options.allowFallback) {
+    // Left `pending` on purpose: the reclaim path picks it up after the staleness window,
+    // so the day is still generated on demand — just not with a standby question standing
+    // in for it.
+    console.warn(
+      `[daily-questions] prewarm generation failed for ${date}/${kind} (${result.reason}); leaving the day ungenerated`,
+    );
+    return null;
   }
 
   console.warn(
@@ -182,19 +203,24 @@ async function waitForReady(
 export async function resolveDailyQuestion(
   kind: QuestionKind,
   date: string,
+  options: { allowFallback: boolean } = { allowFallback: true },
 ): Promise<DailyQuestionRow | null> {
   const existing = await readReady(kind, date);
   if (existing) return existing;
 
   if (await claim(kind, date)) {
-    const published = await generateAndPublish(kind, date);
+    const published = await generateAndPublish(kind, date, options);
     if (published) return published;
-    // Someone reclaimed the row while we were generating; fall through and read
-    // whatever they publish.
+    // Either someone reclaimed the row while we were generating — in which case read
+    // whatever they publish — or this was a pre-warm that deliberately published nothing.
+    if (!options.allowFallback) return waitForReady(kind, date);
   }
 
   const ready = await waitForReady(kind, date);
   if (ready) return ready;
+
+  // A pre-warm must never substitute the standby bank for a day nobody has started yet.
+  if (!options.allowFallback) return null;
 
   // Last resort. Publishing here (rather than returning a generated-but-unsaved
   // question) keeps every member of every room on one identical question.
