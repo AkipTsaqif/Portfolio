@@ -3,6 +3,8 @@ import { posts } from "@/data/posts";
 import { projects } from "@/data/projects";
 import { labTools } from "@/data/tools";
 import { locales, localizedPath } from "@/i18n/config";
+import { isDatabaseConfigured } from "@/lib/db/env";
+import { listPublishedDates } from "@/features/lab/daily-questions/questions";
 import { getSanitySlugs } from "@/lib/sanity/fetch";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -86,11 +88,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ],
   );
 
+  // One page per day that has a question. These are real, dated, unique content — the
+  // strongest thing the tool has for search — and they were previously missing from the
+  // sitemap while `/today` and `/archive` were listed.
+  //
+  // Bounded, and guarded: a sitemap that throws is a sitemap search engines drop. An
+  // unreachable database yields the two index pages rather than a 500.
+  const archivedDates = isDatabaseConfigured()
+    ? await listPublishedDates(90).catch(() => [])
+    : [];
+
+  const dailyArchiveEntries: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    archivedDates.map((date) => ({
+      url: `${baseUrl}${localizedPath(locale, `/lab/daily-questions/archive/${date}`)}`,
+      changeFrequency: "yearly" as const,
+      priority: 0.5,
+    })),
+  );
+
   return [
     ...staticEntries,
     ...projectEntries,
     ...blogEntries,
     ...labEntries,
     ...dailyQuestionEntries,
+    ...dailyArchiveEntries,
   ];
 }

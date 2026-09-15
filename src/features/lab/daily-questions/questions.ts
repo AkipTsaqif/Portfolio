@@ -292,12 +292,19 @@ export async function readDailyQuestion(
   return readReady(kind, date);
 }
 
-/** Every date that has a published question, newest first. */
+/**
+ * Every date that has a published question, newest first.
+ *
+ * `date <= current_date` is load-bearing: pre-generation creates *tomorrow's* question
+ * during a visit today, and the public archive returns 404 for a future date. Without this
+ * the sitemap advertised a URL that does not exist yet.
+ */
 export async function listPublishedDates(limit = 400): Promise<string[]> {
   const result = await db()`
     select distinct date::text as date from daily_questions
      where status = 'ready'
        and deleted_at is null
+       and date <= current_date
      order by date desc
      limit ${limit}
   `;

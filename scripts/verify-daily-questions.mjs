@@ -551,6 +551,49 @@ if (sql) {
   }
 }
 
+// --- 13. sitemap ------------------------------------------------------------
+const sitemapXml = await (await fetch(`${BASE}/sitemap.xml`)).text();
+const listedDates = [
+  ...sitemapXml.matchAll(
+    /\/lab\/daily-questions\/archive\/(\d{4}-\d{2}-\d{2})/g,
+  ),
+].map((match) => match[1]);
+const todayUtc = new Date().toISOString().slice(0, 10);
+const futureDates = [...new Set(listedDates)].filter((date) => date > todayUtc);
+
+check(
+  "the sitemap lists dated archive pages",
+  listedDates.length > 0,
+  `${listedDates.length}`,
+);
+check(
+  "the sitemap keeps private routes out",
+  !/daily-questions\/(room|join)/.test(sitemapXml),
+);
+
+// Pre-generation creates *tomorrow's* row during a visit today, and the archive returns
+// 404 for a future date. Asserting on that is the whole point: a sitemap advertising a
+// 404 is worse than not listing the page at all.
+check(
+  "the sitemap lists no future dates",
+  futureDates.length === 0,
+  futureDates.join(", "),
+);
+
+// and every date it does list has to resolve
+const sampledDates = [...new Set(listedDates)].slice(0, 5);
+const dateStatuses = await Promise.all(
+  sampledDates.map(
+    async (date) =>
+      (await fetch(`${BASE}/en/lab/daily-questions/archive/${date}`)).status,
+  ),
+);
+check(
+  "every listed date resolves",
+  dateStatuses.every((status) => status === 200),
+  `${sampledDates.length} checked: ${dateStatuses.join(", ")}`,
+);
+
 // --- report ---------------------------------------------------------------
 console.log("");
 console.table(results);
