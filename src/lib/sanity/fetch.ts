@@ -26,9 +26,7 @@ export async function getSanityPost(
   );
 }
 
-export async function getSanitySlugs(
-  locale: Locale,
-): Promise<string[] | null> {
+export async function getSanitySlugs(locale: Locale): Promise<string[] | null> {
   if (!sanityClient) return null;
   const rows = await sanityClient.fetch<{ slug: string }[]>(
     postSlugsQuery,

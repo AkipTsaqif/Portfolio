@@ -1,0 +1,77 @@
+name: CI
+
+# Everything here already existed as a script — 126 unit tests, typecheck, lint and a
+# production build — and none of it ran automatically. That is how a class-name bug reached
+# main: the check that would have caught it lived in a script nobody was running.
+#
+# Cheap checks run first so a type error fails in seconds rather than after a 35s build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: typecheck, lint, i18n, tests, format, build
+    runs-on: ubuntu-latest
+
+    env:
+      # Blank on purpose: forces the static-content fallback so the build never reaches out to
+      # Sanity from CI. No secrets, no network dependency, no flaky prerender. Verified locally
+      # that the build succeeds both without .env.local and with this variable set to empty.
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ""
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned to the version this work was verified against, so CI reproduces local results
+      # rather than testing whatever shipped this week.
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.3
+
+      # `scripts/verify-daily-questions.mjs` and `scripts/check-i18n-parity.mjs` are run with
+      # plain node (Bun's FormData is rejected by Next's Server Action parser), so the runner
+      # needs a node on PATH rather than relying on whatever the image ships.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint
+
+      # A key added to en.json and forgotten in id.json is not a type error and not a build
+      # error — it is a missing string in one locale at runtime.
+      - name: i18n parity
+        run: bun run check:i18n
+
+      - name: Unit tests
+        run: bun test
+
+      # Passes on the committed tree. If it fails locally on Windows, that is the CRLF trap
+      # .gitattributes exists to prevent — see the file's header comment.
+      - name: Formatting
+        run: bun run format:check
+
+      - name: Build
+        run: bun run build
+
+# NOT IN CI, deliberately: `bun run verify:daily-questions`, the 34-check end-to-end harness.
+# It drives real Server Actions against a running dev server and a real Neon database, and the
+# app talks to Neon over its HTTP driver — which a plain Postgres service container cannot
+# emulate. It stays a local, manual gate on a dev server until that changes.

@@ -2,3 +2,7 @@
 node_modules
 package-lock.json
 next-env.d.ts
+
+# Vendored and minified, shipped as-is. Reformatting it would rewrite a file we do
+# not own and cannot review.
+public/pdf.worker.min.mjs

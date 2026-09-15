@@ -1,0 +1,23 @@
+# Line endings are normalised in the repository, and checked out as LF everywhere.
+#
+# Why this file exists: `core.autocrlf = true` (a common Windows setting) rewrites
+# every file to CRLF on checkout. Prettier defaults to `endOfLine: "lf"`, so
+# `format:check` failed on 72 files locally while passing in CI on Linux — a gate
+# that disagreed with itself, which is worse than no gate. `eol=lf` here overrides
+# that global setting for this repository only, rather than changing a user-wide
+# git config that other projects may rely on.
+* text=auto eol=lf
+
+# Binary. `text=auto` already detects these, but naming them keeps the intent
+# obvious and stops a future editor from "helpfully" normalising them.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.pdf binary
+*.lockb binary
+*.woff binary
+*.woff2 binary

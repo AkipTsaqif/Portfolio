@@ -14,8 +14,7 @@ interface WebhookDoc {
  *  siblings, then dereference each sibling's slug keyed by language id.
  *  Returns null when no metadata exists (post predates the i18n plugin).
  *  Uses the non-CDN client to avoid propagation delay after a publish. */
-const siblingSlugsQuery =
-  `*[_type == "translation.metadata" && references($docId)][0]{
+const siblingSlugsQuery = `*[_type == "translation.metadata" && references($docId)][0]{
     "translations": translations[]{
       "locale": language,
       "slug": value->slug.current

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
+    "check:i18n": "node ./scripts/check-i18n-parity.mjs",
     "db:migrate": "bun run ./scripts/db-migrate.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
