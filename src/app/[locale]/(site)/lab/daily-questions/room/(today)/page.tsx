@@ -16,6 +16,16 @@ import { inviteUrl } from "@/features/lab/daily-questions/urls";
 import { isLocale, localizedPath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
+/**
+ * The room page blocks on generation too, and so does `submitAnswerAction`, which
+ * calls `resolveDailyQuestion` before accepting an answer. Next.js applies a
+ * page-level `maxDuration` to the Server Actions used on that page, so this single
+ * export covers both.
+ *
+ * See the public `/today` route for why this is set rather than relied on.
+ */
+export const maxDuration = 60;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/lab/daily-questions/room">): Promise<Metadata> {

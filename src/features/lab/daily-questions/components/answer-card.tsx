@@ -5,6 +5,19 @@ import { REACTION_EMOJIS } from "../types";
 import { ConfirmSubmit } from "./confirm-submit";
 
 /**
+ * Joins the truthy names, so class lists get exactly one space between them.
+ *
+ * Built after shipping a real bug from hand-written concatenation:
+ * `"dq-answer" + "dq-answer-mine"` produced `dq-answerdq-answer-mine`, one bogus
+ * class matching nothing, so the reader's own answer card silently lost its
+ * padding, background and grid — and it looked like a CSS problem rather than a
+ * string problem. `filter(Boolean).join(" ")` cannot glue two names together.
+ */
+function classes(...names: (string | false | null | undefined)[]) {
+  return names.filter(Boolean).join(" ");
+}
+
+/**
  * One person's slot for the day.
  *
  * When `body` is null the server never sent the text at all, so there is nothing
@@ -27,11 +40,7 @@ export function AnswerCard({
   const t = copy.room;
 
   return (
-    <article
-      className={`dq-answer${entry.isMe ? "dq-answer-mine" : ""}${
-        entry.body ? "" : "dq-answer-locked"
-      }`}
-    >
+    <article className={classes("dq-answer", entry.isMe && "dq-answer-mine")}>
       <header className="dq-answer-head">
         <h3>{entry.displayName}</h3>
         {entry.isMe ? <span className="dq-chip">{t.ownAnswerNote}</span> : null}
@@ -121,9 +130,11 @@ function ReactionBar({
             <input name="emoji" type="hidden" value={emoji} />
             <button
               aria-pressed={mine}
-              className={`dq-reaction${mine ? "dq-reaction-mine" : ""}${
-                count === 0 ? "dq-reaction-empty" : ""
-              }`}
+              className={classes(
+                "dq-reaction",
+                mine && "dq-reaction-mine",
+                count === 0 && "dq-reaction-empty",
+              )}
               title={mine ? t.removeReaction : t.reactToAnswer}
               type="submit"
             >

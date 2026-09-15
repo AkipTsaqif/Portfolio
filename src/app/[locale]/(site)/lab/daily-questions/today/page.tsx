@@ -22,6 +22,20 @@ import { getDictionary } from "@/i18n/dictionaries";
  */
 export const dynamic = "force-dynamic";
 
+/**
+ * Generation takes 14-21s against the live gateway, and the retry budget allows up
+ * to 45s. Vercel's default is 300s with Fluid Compute (the default for new
+ * projects), so this is normally redundant — but a project created before Fluid
+ * Compute became the default still has the old 10s Hobby ceiling, where generation
+ * would time out on every attempt and serve the standby question forever, with
+ * nothing in the UI to say why. Setting it explicitly makes the requirement part of
+ * the code rather than a property of the project.
+ *
+ * A page-level value also sets the timeout for Server Actions invoked from that
+ * page; see the room route for the one that matters there.
+ */
+export const maxDuration = 60;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/lab/daily-questions/today">): Promise<Metadata> {

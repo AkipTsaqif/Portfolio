@@ -292,6 +292,25 @@ check(
 );
 check("UNLOCKED: reactions are rendered", /dq-reaction/.test(openHtml));
 
+// Regression guard for a real bug: hand-built class lists glued two names into
+// one bogus class ("dq-answerdq-answer-mine"), which matches no CSS rule, so the
+// card silently lost its padding and background. A single token that is really
+// two dq- classes concatenated is exactly that failure.
+const gluedClasses = [...openHtml.matchAll(/class="([^"]*)"/g)]
+  .flatMap((match) => match[1].split(/\s+/))
+  .filter((token) => /^dq-[a-z-]+dq-[a-z-]+$/.test(token));
+
+check(
+  "no class names are glued together",
+  gluedClasses.length === 0,
+  gluedClasses.join(", "),
+);
+
+check(
+  "the reader's own answer card keeps both of its classes",
+  /class="dq-answer dq-answer-mine"/.test(openHtml),
+);
+
 // --- 7. lock on submit ----------------------------------------------------
 check(
   "the answer box is gone after submitting",
@@ -319,7 +338,9 @@ const creatorAfterReaction = await get(ROOM_URL, creatorCookie);
 check("toggleReactionAction succeeds", reacted.status === 200);
 check(
   "their reaction is marked as yours",
-  /dq-reaction-mine/.test(partnerAfterReaction),
+  // boundary-aware on purpose: the glued "dq-reactiondq-reaction-mine" contains
+  // this substring, so a naive test passes on a broken class list
+  /(?:^|["\s])dq-reaction-mine(?=["\s])/.test(partnerAfterReaction),
 );
 check(
   "you can see the reaction they left on your answer",
