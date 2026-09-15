@@ -124,6 +124,9 @@ export default async function DailyQuestionsPage({
         <Link href={localizedPath(locale, "/lab/daily-questions/archive")}>
           {t.archive.metaTitle} →
         </Link>
+        <Link href={localizedPath(locale, "/lab/daily-questions/status")}>
+          {t.status.metaTitle} →
+        </Link>
       </nav>
     </div>
   );

@@ -379,6 +379,36 @@
       "answerRetracted": "Jawaban ditarik kembali.",
       "modeChanged": "Gaya pertanyaan diperbarui. Berlaku mulai pertanyaan berikutnya."
     },
-    "preparing": "Menyiapkan pertanyaan hari ini…"
+    "preparing": "Menyiapkan pertanyaan hari ini…",
+    "status": {
+      "metaTitle": "Status alat",
+      "metaDescription": "Pemeriksaan langsung untuk alat Tanya Harian: basis data, generator pertanyaan, dan apakah pertanyaan hari ini benar-benar dihasilkan.",
+      "eyebrow": "Lab · Status",
+      "title": "Apakah alat ini berjalan?",
+      "description": "Pemeriksaan langsung terhadap dua hal yang dibutuhkan tanya harian, plus apakah pertanyaan hari ini sudah ada. Kegagalan yang biasa terjadi justru sunyi: alat tetap berjalan, tetapi menyajikan pertanyaan cadangan dan bukan yang dihasilkan model. Hal itu terlihat di sini.",
+      "overall": {
+        "ok": "Semua pemeriksaan lolos",
+        "degraded": "Berjalan, dengan catatan",
+        "down": "Tidak berjalan"
+      },
+      "dayLabel": "Hari yang diperiksa",
+      "checks": {
+        "database": "Basis data",
+        "gateway": "Generator pertanyaan",
+        "knowledge": "Pertanyaan pengetahuan hari ini",
+        "reflective": "Pertanyaan terbuka hari ini"
+      },
+      "detail": {
+        "reachable": "Terjangkau",
+        "unreachable": "Tidak menjawab",
+        "timedOut": "Kehabisan waktu",
+        "notConfigured": "Belum dikonfigurasi, jadi semua pertanyaan berasal dari bank cadangan",
+        "generated": "Dihasilkan oleh model",
+        "notGenerated": "Belum dihasilkan. Kunjungan pertama hari ini yang membuatnya.",
+        "standby": "Dari bank cadangan, pembuatan gagal"
+      },
+      "latencyLabel": "Respons",
+      "note": "Publik tetapi sengaja tidak diindeks. Teks galat tidak pernah ditampilkan, hanya apakah tiap dependensi menjawab."
+    }
   }
 }
