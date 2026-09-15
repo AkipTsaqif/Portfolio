@@ -594,6 +594,28 @@ check(
   `${sampledDates.length} checked: ${dateStatuses.join(", ")}`,
 );
 
+// --- 14. travel page --------------------------------------------------------
+// The map itself cannot be verified here: it needs a browser and at least one destination with
+// coordinates, and the CMS has none yet. What is checkable is that the page is reachable and is
+// honest about which of the two states it is in — plotting, or explaining why it is not.
+const travelResponse = await fetch(`${BASE}/en/travel`);
+const travelHtml = travelResponse.ok ? await travelResponse.text() : "";
+
+check(
+  "the travel page renders",
+  travelResponse.status === 200,
+  `${travelResponse.status}`,
+);
+check(
+  "it either plots or explains the empty state",
+  /travel-map/.test(travelHtml) ||
+    /No destinations have coordinates/.test(travelHtml),
+);
+check(
+  "the other locale renders too",
+  (await fetch(`${BASE}/id/travel`)).status === 200,
+);
+
 // --- report ---------------------------------------------------------------
 console.log("");
 console.table(results);

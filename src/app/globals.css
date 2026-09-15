@@ -3027,3 +3027,63 @@ button:focus-visible {
   height: 7px;
   width: 7px;
 }
+
+/* travel map: the container needs an explicit height or Leaflet renders into nothing */
+.travel-map {
+  border: 1px solid var(--line);
+  height: 62vh;
+  margin-top: 60px;
+  min-height: 380px;
+  width: 100%;
+}
+.travel-empty {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.travel-list {
+  border-top: 1px solid var(--line);
+  list-style: none;
+  margin: 70px 0 0;
+  padding: 0;
+}
+.travel-list li {
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 4px 24px;
+  grid-template-columns: 1fr auto;
+  padding: 22px 0;
+}
+.travel-list strong {
+  font-size: 15px;
+}
+.travel-country {
+  color: var(--muted);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.travel-list p {
+  color: var(--muted);
+  font-size: 14px;
+  grid-column: 1 / -1;
+  line-height: 1.6;
+  margin: 0;
+}
+/* Leaflet's own controls sit on top of the page; keep them in the site's palette */
+.travel-map .leaflet-popup-content {
+  font-family: var(--font-manrope), Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.travel-map .leaflet-container {
+  background: var(--paper);
+  font-family: var(--font-manrope), Arial, sans-serif;
+}
+
+@media (max-width: 760px) {
+  .travel-map {
+    height: 52vh;
+    min-height: 320px;
+  }
+}

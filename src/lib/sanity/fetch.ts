@@ -1,7 +1,12 @@
 import { sanityClient } from "./client";
-import { postQuery, postsQuery, postSlugsQuery } from "./queries";
+import {
+  destinationsQuery,
+  postQuery,
+  postsQuery,
+  postSlugsQuery,
+} from "./queries";
 import type { Locale } from "@/i18n/config";
-import type { SanityPost, SanityPostPreview } from "./types";
+import type { SanityDestination, SanityPost, SanityPostPreview } from "./types";
 
 export async function getSanityPosts(
   locale: Locale,
@@ -34,4 +39,15 @@ export async function getSanitySlugs(locale: Locale): Promise<string[] | null> {
     { next: { revalidate: 3600, tags: ["posts"] } },
   );
   return rows?.map((row) => row.slug) ?? null;
+}
+
+export async function getSanityDestinations(): Promise<
+  SanityDestination[] | null
+> {
+  if (!sanityClient) return null;
+  return sanityClient.fetch<SanityDestination[]>(
+    destinationsQuery,
+    {},
+    { next: { revalidate: 3600, tags: ["destinations"] } },
+  );
 }

@@ -23,6 +23,7 @@
     "@sanity/document-internationalization": "^6.2.27",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.6.0",
+    "leaflet": "^1.9.4",
     "next": "16.2.12",
     "next-sanity": "^13.2.1",
     "pdfjs-dist": "^6.1.200",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/bun": "^1.4.2",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

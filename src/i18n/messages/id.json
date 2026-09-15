@@ -427,5 +427,14 @@
       "working": "Memproses…",
       "failed": "Gagal menyalakan notifikasi. Coba lagi."
     }
+  },
+  "travel": {
+    "metaTitle": "Jurnal perjalanan",
+    "metaDescription": "Semua tempat di jurnal, dalam satu peta — dihimpun dari destinasi di balik tulisannya.",
+    "eyebrow": "Jurnal",
+    "title": "Tempat yang pernah saya datangi.",
+    "description": "Setiap tempat yang punya tulisan di baliknya, digambarkan di peta. Jurnalnya ditulis tempat demi tempat, jadi ini lebih mirip indeks daripada papan skor.",
+    "mapLabel": "Peta tempat-tempat yang ditulis di jurnal",
+    "empty": "Belum ada destinasi yang punya koordinat. Tambahkan koordinat pada destinasi di Studio dan tempatnya akan muncul di sini."
   }
 }

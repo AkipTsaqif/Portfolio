@@ -57,3 +57,18 @@ export type SanityPost = SanityPostPreview & {
     canonicalUrl?: string;
   };
 };
+
+/**
+ * A place from the travel journal.
+ *
+ * `coordinates` is nullable in the schema, and the query filters those out — the type keeps
+ * the nullability so a future caller cannot forget that the database permits it.
+ */
+export type SanityDestination = {
+  _id: string;
+  slug: string;
+  name: string;
+  country: string;
+  description: string | null;
+  coordinates: { lat: number; lng: number; alt?: number } | null;
+};

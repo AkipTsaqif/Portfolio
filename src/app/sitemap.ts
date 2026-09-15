@@ -5,7 +5,7 @@ import { labTools } from "@/data/tools";
 import { locales, localizedPath } from "@/i18n/config";
 import { isDatabaseConfigured } from "@/lib/db/env";
 import { listPublishedDates } from "@/features/lab/daily-questions/questions";
-import { getSanitySlugs } from "@/lib/sanity/fetch";
+import { getSanityDestinations, getSanitySlugs } from "@/lib/sanity/fetch";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -106,6 +106,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
+  // The travel map is content-dependent: with no destinations entered it renders an empty
+  // state, and an empty page is not worth indexing. It joins the sitemap only once there is
+  // something to see, so it becomes discoverable exactly when it is worth finding.
+  const destinations = (await getSanityDestinations().catch(() => null)) ?? [];
+  const travelEntries: MetadataRoute.Sitemap =
+    destinations.length > 0
+      ? locales.map((locale) => ({
+          url: `${baseUrl}${localizedPath(locale, "/travel")}`,
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        }))
+      : [];
+
   return [
     ...staticEntries,
     ...projectEntries,
@@ -113,5 +126,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...labEntries,
     ...dailyQuestionEntries,
     ...dailyArchiveEntries,
+    ...travelEntries,
   ];
 }

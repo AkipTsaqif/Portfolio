@@ -427,5 +427,14 @@
       "working": "Working…",
       "failed": "Could not turn notifications on. Try again."
     }
+  },
+  "travel": {
+    "metaTitle": "Travel journal",
+    "metaDescription": "Every place in the journal, on one map — gathered from the destinations behind the posts.",
+    "eyebrow": "The journal",
+    "title": "Where I have been.",
+    "description": "Every place that has a post behind it, plotted. The journal is written place by place, so this is less a scoreboard than an index.",
+    "mapLabel": "Map of the places written about in the journal",
+    "empty": "No destinations have coordinates yet. Add them to a destination in the Studio and they will appear here."
   }
 }
