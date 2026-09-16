@@ -27,10 +27,16 @@ Here's exactly how AI was — and wasn't — used.
 ## What stayed human
 
 - **Design direction** — the visual system, layout, and typography decisions.
-- **All published writing outside the Daily Questions tool** — page copy,
-  journal posts, and this disclosure.
+- **The journal posts** — written by hand.
 - **Final review** — every change was reviewed before it was committed and
   deployed. I take responsibility for everything in this repository.
+
+## Drafted by AI, reviewed by me
+
+Most of the page copy on this site — interface labels, the Lab tools' wording,
+and this page itself — was drafted by an agent and edited by me. The section
+above used to claim otherwise. A transparency note that is wrong about itself
+is worse than no transparency note.
 
 ## Generated content
 
@@ -53,7 +59,6 @@ rather than code: **the daily question in the Lab's Daily Questions tool**.
 - Git history (`git log`) shows the full evolution of the codebase.
 - Planning notes are intentionally not committed, so this repository shows
   finished, reviewed work rather than raw agent logs.
-- No AI-generated prose is presented as human-written content. The single
-  machine-written surface, the daily question, is labelled as machine-written.
+- Machine-drafted prose is named as such, rather than presented as mine.
 
-_Last updated: 2026-09-10_
+_Last updated: 2026-09-16_

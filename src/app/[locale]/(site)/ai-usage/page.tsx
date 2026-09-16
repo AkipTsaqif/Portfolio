@@ -3,9 +3,19 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale } from "@/i18n/config";
 
-// Body content mirrors AI-USAGE.md at the repo root (the single source of
-// truth for repository visitors). The page keeps the body in English; move
-// the sections into the id dictionary if a fully localized version is wanted.
+/**
+ * The disclosure page.
+ *
+ * The whole body lives in the dictionaries, so `/id` renders Indonesian rather than an
+ * Indonesian heading over English prose. It previously kept the body as hardcoded English
+ * strings in this file — which meant the one page whose entire purpose is transparency was
+ * the one page that was not translated, and no check could notice, because a body that is
+ * not in the dictionary is invisible to the parity gate.
+ *
+ * `AI-USAGE.md` at the repository root mirrors this content for people reading the repo.
+ * Two copies is not ideal, but the file is the repo-facing source and the dictionary is the
+ * site-facing one; the page's own "Last updated" line is what keeps them honest.
+ */
 
 export async function generateMetadata({
   params,
@@ -16,12 +26,42 @@ export async function generateMetadata({
   return { title: t.metaTitle, description: t.metaDescription };
 }
 
+/**
+ * `lead` — text, reproducing the original emphasis. Keeping the markup here rather than in
+ * the dictionary means translators deal in prose, not in tags.
+ */
+function Lead({ lead, text }: { lead: string; text: string }) {
+  return (
+    <>
+      <strong>{lead}</strong> — {text}
+    </>
+  );
+}
+
+/**
+ * Renders `backtick` spans as `<code>`. Small, but it lets a dictionary string mention a
+ * command without the JSON needing to know about HTML.
+ */
+function CodeText({ text }: { text: string }) {
+  const parts = text.split(/`([^`]+)`/g);
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        index % 2 === 1 ? <code key={index}>{part}</code> : part,
+      )}
+    </>
+  );
+}
+
 export default async function AiUsagePage({
   params,
 }: PageProps<"/[locale]/ai-usage">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+
   const t = (await getDictionary(locale)).aiUsage;
+  const b = t.body;
 
   return (
     <div className="shell page-wrap">
@@ -32,112 +72,67 @@ export default async function AiUsagePage({
       </header>
 
       <div className="long-copy ai-usage-copy">
-        <h2>Tools</h2>
+        <h2>{b.tools.heading}</h2>
         <ul className="ai-usage-list">
           <li>
-            <strong>pi.dev</strong> — an AI coding agent that writes, edits, and
-            verifies code in this repository.
+            <Lead lead={b.tools.piLead} text={b.tools.piText} />
           </li>
           <li>
-            <strong>OpenRouter</strong> — the provider that routes the models
-            pi.dev uses.
+            <Lead lead={b.tools.openrouterLead} text={b.tools.openrouterText} />
           </li>
           <li>
-            <strong>OmniRoute</strong> — a self-hosted, OpenAI-compatible
-            gateway. The Lab&apos;s Daily Questions tool calls it at runtime to
-            write each day&apos;s question; it is not involved in building this
-            site.
+            <Lead lead={b.tools.omnirouteLead} text={b.tools.omnirouteText} />
           </li>
         </ul>
 
-        <h2>What the AI did</h2>
+        <h2>{b.did.heading}</h2>
+        <ul className="ai-usage-list">
+          <li>{b.did.scaffold}</li>
+          <li>{b.did.sanity}</li>
+          <li>{b.did.docs}</li>
+          <li>{b.did.debug}</li>
+        </ul>
+
+        <h2>{b.human.heading}</h2>
         <ul className="ai-usage-list">
           <li>
-            Scaffolded the project and implemented most of the application code
-            (Next.js App Router pages, components, styling).
+            <Lead lead={b.human.designLead} text={b.human.designText} />
           </li>
           <li>
-            Built the Sanity CMS integration: content schema, GROQ queries,
-            fetch layer, and the ISR revalidation webhook — including the
-            document-level en/id internationalization migration.
+            <Lead lead={b.human.journalLead} text={b.human.journalText} />
           </li>
           <li>
-            Wrote engineering planning documents and internal analysis (kept out
-            of this repository by design).
-          </li>
-          <li>
-            Debugged issues and ran verification (typecheck, lint, production
-            build).
+            <Lead lead={b.human.reviewLead} text={b.human.reviewText} />
           </li>
         </ul>
 
-        <h2>What stayed human</h2>
-        <ul className="ai-usage-list">
-          <li>
-            <strong>Design direction</strong> — the visual system, layout, and
-            typography decisions.
-          </li>
-          <li>
-            <strong>
-              All published writing outside the Daily Questions tool
-            </strong>{" "}
-            — page copy, journal posts, and this disclosure.
-          </li>
-          <li>
-            <strong>Final review</strong> — every change was reviewed before it
-            was committed and deployed.
-          </li>
-        </ul>
+        {/* Added because the section above used to claim that all page copy and this
+            disclosure were human-written. Neither was, and a transparency page that is
+            wrong about itself is worse than no transparency page. */}
+        <h2>{b.drafted.heading}</h2>
+        <p>{b.drafted.text}</p>
 
-        <h2>Generated content</h2>
+        <h2>{b.generated.heading}</h2>
         <p>
-          There is exactly one place on this site where an AI writes published
-          content rather than code:{" "}
-          <strong>
-            the daily question in the Lab&apos;s Daily Questions tool
-          </strong>
-          .
+          {b.generated.intro} <strong>{b.generated.introStrong}</strong>.
         </p>
         <ul className="ai-usage-list">
-          <li>
-            The question is generated once per UTC day by the model behind
-            OmniRoute, then stored and served to everyone. It is not regenerated
-            per visitor.
-          </li>
-          <li>
-            It appears publicly on the question-of-the-day page and in the
-            question archive, and those pages say so.
-          </li>
-          <li>
-            Knowledge questions carry a model-written answer and explanation.
-            These are checked by hand when read, but not edited before
-            publication, so treat them as machine output that may occasionally
-            be wrong.
-          </li>
-          <li>
-            Everything a person writes inside the tool — everyone&apos;s answers
-            — is private and is never published.
-          </li>
+          <li>{b.generated.once}</li>
+          <li>{b.generated.public}</li>
+          <li>{b.generated.knowledge}</li>
+          <li>{b.generated.private}</li>
         </ul>
 
-        <h2>Verification</h2>
+        <h2>{b.verification.heading}</h2>
         <ul className="ai-usage-list">
           <li>
-            Git history (<code>git log</code>) shows the full evolution of the
-            codebase.
+            <CodeText text={b.verification.history} />
           </li>
-          <li>
-            Planning notes are intentionally not committed, so this repository
-            shows finished, reviewed work rather than raw agent logs.
-          </li>
-          <li>
-            No AI-generated prose is presented as human-written content. The
-            single machine-written surface, the daily question, is labelled as
-            machine-written.
-          </li>
+          <li>{b.verification.notes}</li>
+          <li>{b.verification.prose}</li>
         </ul>
 
-        <p className="ai-usage-updated">Last updated: 2026-09-10</p>
+        <p className="ai-usage-updated">{b.updated}</p>
       </div>
     </div>
   );

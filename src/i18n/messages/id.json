@@ -26,10 +26,57 @@
   },
   "aiUsage": {
     "metaTitle": "Penggunaan AI",
-    "metaDescription": "Rincian transparan tentang bagaimana alat AI digunakan untuk membangun situs ini.",
+    "metaDescription": "Penjelasan terbuka tentang bagaimana alat AI dipakai untuk membangun situs ini.",
     "eyebrow": "Transparansi",
-    "title": "Bagaimana situs ini dibuat.",
-    "description": "Saya membangun dengan bantuan AI, dan saya ingin jujur soal itu. Berikut persisnya apa yang dikerjakan AI dan apa yang tetap dikerjakan manusia."
+    "title": "Bagaimana situs ini dibangun.",
+    "description": "Saya membangun dengan bantuan AI, dan saya ingin terbuka soal itu. Berikut persisnya apa yang dikerjakan AI dan apa yang tetap dikerjakan manusia.",
+    "body": {
+      "tools": {
+        "heading": "Perkakas",
+        "piLead": "pi.dev",
+        "piText": "agen pengkodean AI yang menulis, menyunting, dan memverifikasi kode di repositori ini.",
+        "openrouterLead": "OpenRouter",
+        "openrouterText": "penyedia yang mengarahkan model yang dipakai pi.dev.",
+        "omnirouteLead": "OmniRoute",
+        "omnirouteText": "gateway yang di-host sendiri dan kompatibel dengan OpenAI. Alat Tanya Harian di Lab memanggilnya saat berjalan untuk menulis pertanyaan setiap hari; ia tidak terlibat dalam membangun situs ini."
+      },
+      "did": {
+        "heading": "Apa yang dikerjakan AI",
+        "scaffold": "Menyiapkan proyek dan mengimplementasikan sebagian besar kode aplikasi (halaman, komponen, dan gaya Next.js App Router).",
+        "sanity": "Membangun integrasi Sanity CMS: skema konten, kueri GROQ, lapisan pengambilan data, dan webhook revalidasi ISR — termasuk migrasi internasionalisasi en/id tingkat dokumen.",
+        "docs": "Menulis dokumen perencanaan teknis dan analisis internal (sengaja tidak disertakan di repositori ini).",
+        "debug": "Menelusuri masalah dan menjalankan verifikasi (typecheck, lint, build produksi)."
+      },
+      "human": {
+        "heading": "Apa yang tetap dikerjakan manusia",
+        "designLead": "Arah desain",
+        "designText": "sistem visual, tata letak, dan keputusan tipografi.",
+        "journalLead": "Tulisan jurnal",
+        "journalText": "ditulis dengan tangan.",
+        "reviewLead": "Tinjauan akhir",
+        "reviewText": "setiap perubahan ditinjau sebelum di-commit dan di-deploy."
+      },
+      "drafted": {
+        "heading": "Disusun AI, ditinjau saya",
+        "text": "Sebagian besar teks di situs ini — label antarmuka, kata-kata di alat Lab, dan halaman ini sendiri — disusun oleh agen lalu saya sunting. Bagian di atas sebelumnya mengklaim sebaliknya. Catatan transparansi yang keliru tentang dirinya sendiri lebih buruk daripada tidak ada catatan sama sekali."
+      },
+      "generated": {
+        "heading": "Konten yang dihasilkan",
+        "intro": "Hanya ada satu tempat di situs ini di mana AI menulis konten terbitan, bukan kode:",
+        "introStrong": "pertanyaan harian di alat Tanya Harian milik Lab",
+        "once": "Pertanyaan dibuat sekali per hari UTC oleh model di balik OmniRoute, lalu disimpan dan disajikan ke semua orang. Ia tidak dibuat ulang per pengunjung.",
+        "public": "Ia tampil publik di halaman pertanyaan hari ini dan di arsip pertanyaan, dan halaman-halaman itu menyebutkannya.",
+        "knowledge": "Pertanyaan pengetahuan membawa jawaban dan penjelasan yang ditulis model. Semuanya diperiksa manual saat dibaca, tetapi tidak disunting sebelum terbit, jadi perlakukan sebagai keluaran mesin yang sesekali bisa keliru.",
+        "private": "Semua yang ditulis orang di dalam alat ini — jawaban setiap orang — bersifat privat dan tidak pernah diterbitkan."
+      },
+      "verification": {
+        "heading": "Verifikasi",
+        "history": "Riwayat Git (`git log`) menunjukkan seluruh evolusi basis kode.",
+        "notes": "Catatan perencanaan sengaja tidak di-commit, jadi repositori ini menampilkan pekerjaan yang sudah selesai dan ditinjau, bukan log mentah agen.",
+        "prose": "Teks yang disusun mesin disebutkan sebagai demikian, bukan disajikan sebagai tulisan saya."
+      },
+      "updated": "Terakhir diperbarui: 2026-09-16"
+    }
   },
   "home": {
     "status": "Tersedia untuk proyek pilihan",
