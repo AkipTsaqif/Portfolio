@@ -149,13 +149,3 @@ export function utcWeekdayLabels(locale: Locale): string[] {
     return formatter.format(instant);
   });
 }
-
-/** How many milliseconds of the current UTC day have elapsed. */
-export function utcMillisIntoDay(now: Date = new Date()): number {
-  return (
-    now.getUTCHours() * 3_600_000 +
-    now.getUTCMinutes() * 60_000 +
-    now.getUTCSeconds() * 1_000 +
-    now.getUTCMilliseconds()
-  );
-}

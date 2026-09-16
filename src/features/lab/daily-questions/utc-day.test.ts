@@ -176,10 +176,31 @@ describe("utcMonthGrid", () => {
 });
 
 describe("formatting", () => {
-  test("renders a date in both site locales", () => {
-    expect(formatUtcDate(FRIDAY, "en")).toContain("2026");
-    expect(formatUtcDate(FRIDAY, "id")).toContain("2026");
-    expect(formatUtcDate(FRIDAY, "en")).not.toBe(formatUtcDate(FRIDAY, "id"));
+  test("renders the UTC day, not the machine's local day", () => {
+    // The one piece of logic in formatUtcDate that is ours is the `timeZone: "UTC"` pin.
+    // Without it, 2026-09-11T00:00Z renders as the 10th on any machine behind UTC, which
+    // is what this catches.
+    const rendered = formatUtcDate(FRIDAY, "en");
+    expect(rendered).toContain("2026");
+    expect(rendered).toMatch(/\b11\b/);
+  });
+
+  test("accepts both site locales", () => {
+    // Deliberately does NOT assert the two render differently, which an earlier version
+    // did — and it passed here for the wrong reason. This machine's ICU abbreviates
+    // September as "Sept" in en-GB and "Sep" in id-ID, so the strings differed; a CI
+    // runner's ICU data abbreviates both as "Sep", so the assertion failed. It was
+    // measuring the runtime's CLDR version rather than this function.
+    //
+    // Month names are ICU's business. The wrapper's job is choosing the BCP-47 tag and
+    // pinning UTC, and the tag choice is not observable without depending on ICU data.
+    for (const locale of ["en", "id"] as const) {
+      expect(formatUtcDate(FRIDAY, locale)).toContain("2026");
+    }
+  });
+
+  test("is stable for the same input", () => {
+    expect(formatUtcDate(FRIDAY, "en")).toBe(formatUtcDate(FRIDAY, "en"));
   });
 
   test("gives seven weekday initials starting on Monday", () => {
