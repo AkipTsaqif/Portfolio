@@ -141,6 +141,10 @@
       "daily-questions": {
         "name": "Tanya Harian",
         "description": "Satu pertanyaan setiap hari, dijawab tertutup, lalu dibuka untuk saling dibaca."
+      },
+      "i18n-parity": {
+        "name": "Pemeriksa Kesetaraan i18n",
+        "description": "Bandingkan dua berkas terjemahan JSON dan lihat persis kunci mana yang tidak sinkron. Berjalan sepenuhnya di perambanmu."
       }
     }
   },
@@ -436,5 +440,30 @@
     "description": "Setiap tempat yang punya tulisan di baliknya, digambarkan di peta. Jurnalnya ditulis tempat demi tempat, jadi ini lebih mirip indeks daripada papan skor.",
     "mapLabel": "Peta tempat-tempat yang ditulis di jurnal",
     "empty": "Belum ada destinasi yang punya koordinat. Tambahkan koordinat pada destinasi di Studio dan tempatnya akan muncul di sini."
+  },
+  "parityTool": {
+    "metaTitle": "Pemeriksa Kesetaraan i18n",
+    "metaDescription": "Bandingkan dua berkas terjemahan JSON dan lihat persis kunci mana yang tidak sinkron. Berjalan sepenuhnya di perambanmu.",
+    "eyebrow": "Lab · Alat developer",
+    "title": "Dua berkas kamus. Kunci mana yang tidak sinkron?",
+    "description": "Tempel atau buka dua berkas terjemahan, lalu lihat jalur kunci yang hanya ada di satu sisi, plus kunci yang dibiarkan kosong. Tidak ada yang diunggah — kedua berkas dibaca di tab ini.",
+    "leftLabel": "Berkas pertama",
+    "rightLabel": "Berkas kedua",
+    "pastePlaceholder": "Tempel JSON di sini, atau pilih berkas di atas",
+    "compare": "Bandingkan",
+    "clear": "Bersihkan",
+    "allMatch": "Setara persis — setiap kunci cocok di kedua sisi.",
+    "drift": "Kunci-kunci ini tidak sinkron.",
+    "keyCountLeft": "Kunci di kiri",
+    "keyCountRight": "Kunci di kanan",
+    "missingInRight": "Hilang di kanan",
+    "missingInLeft": "Hilang di kiri",
+    "emptyInLeft": "Kosong di kiri",
+    "emptyInRight": "Kosong di kanan",
+    "none": "Tidak ada",
+    "errorEmpty": "Sisi ini kosong — pilih berkas atau tempel JSON.",
+    "errorInvalidJson": "Itu bukan JSON yang valid.",
+    "errorNotObject": "Bagian paling luar harus berupa objek JSON, bukan larik atau nilai tunggal.",
+    "localNote": "Berjalan di perambanmu. Tidak ada berkas yang keluar dari tab ini."
   }
 }

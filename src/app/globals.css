@@ -3087,3 +3087,178 @@ button:focus-visible {
     min-height: 320px;
   }
 }
+
+/* i18n parity checker: two inputs and a verdict. Reuses the Lab's card language
+   rather than the dashboard one — it is one job, done in one sitting. */
+.parity-tool {
+  margin-top: 75px;
+}
+.parity-local-note {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 12px;
+  gap: 8px;
+  margin: 0;
+  padding-top: 16px;
+}
+.parity-local-note span {
+  color: #9dbb2a;
+}
+.parity-panels {
+  background: var(--line);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 1px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 45px;
+}
+.parity-panel {
+  background: var(--paper);
+  display: grid;
+  gap: 10px;
+  padding: 26px;
+}
+.parity-label {
+  color: var(--muted);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.parity-file {
+  color: var(--muted);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  width: 100%;
+}
+.parity-textarea {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 220px;
+  padding: 12px 14px;
+  resize: vertical;
+  width: 100%;
+}
+.parity-textarea:focus-visible {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.parity-error {
+  background: color-mix(in srgb, var(--coral) 18%, var(--paper));
+  border-left: 3px solid var(--coral);
+  font-size: 12px;
+  margin: 0;
+  padding: 10px 12px;
+}
+.parity-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 26px;
+}
+.parity-button {
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  min-height: 48px;
+  padding: 14px 22px;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.parity-button:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink);
+}
+.parity-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.parity-button-quiet {
+  background: transparent;
+  color: var(--muted);
+}
+.parity-button-quiet:hover:not(:disabled) {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.parity-result {
+  border-top: 1px solid var(--line);
+  margin-top: 60px;
+  padding-top: 20px;
+}
+.parity-verdict {
+  align-items: center;
+  display: flex;
+  font-family: var(--serif);
+  font-size: 24px;
+  gap: 12px;
+  margin: 0;
+}
+.parity-counts {
+  display: flex;
+  gap: 45px;
+  margin: 28px 0 0;
+}
+.parity-counts dt {
+  color: var(--muted);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.parity-counts dd {
+  font-family: var(--serif);
+  font-size: 30px;
+  margin: 6px 0 0;
+}
+.parity-list {
+  border-top: 1px solid var(--line);
+  margin-top: 30px;
+  padding-top: 14px;
+}
+.parity-list-label {
+  color: var(--muted);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  margin: 0;
+  text-transform: uppercase;
+}
+.parity-list-label span {
+  color: var(--ink);
+}
+.parity-list ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.parity-list li {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .parity-panels {
+    grid-template-columns: 1fr;
+  }
+  .parity-counts {
+    gap: 30px;
+  }
+}

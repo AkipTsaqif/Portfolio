@@ -616,6 +616,25 @@ check(
   (await fetch(`${BASE}/id/travel`)).status === 200,
 );
 
+// --- 15. the parity lab tool -------------------------------------------------
+// This script has drifted into being the repository's general end-to-end smoke test — it
+// already covers the travel page, and the name no longer describes everything it checks.
+// Worth renaming when someone next touches it.
+const parityResponse = await fetch(`${BASE}/en/lab/i18n-parity`);
+check(
+  "the parity tool page renders",
+  parityResponse.status === 200,
+  `${parityResponse.status}`,
+);
+check(
+  "the other locale renders too",
+  (await fetch(`${BASE}/id/lab/i18n-parity`)).status === 200,
+);
+check(
+  "it is listed on the lab index",
+  /i18n-parity/.test(await (await fetch(`${BASE}/en/lab`)).text()),
+);
+
 // --- report ---------------------------------------------------------------
 console.log("");
 console.table(results);

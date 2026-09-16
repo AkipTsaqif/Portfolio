@@ -141,6 +141,10 @@
       "daily-questions": {
         "name": "Daily Questions",
         "description": "One question a day, answered privately, then revealed to each other."
+      },
+      "i18n-parity": {
+        "name": "i18n Parity Checker",
+        "description": "Compare two translation JSON files and see exactly which keys have drifted apart. Runs entirely in your browser."
       }
     }
   },
@@ -436,5 +440,30 @@
     "description": "Every place that has a post behind it, plotted. The journal is written place by place, so this is less a scoreboard than an index.",
     "mapLabel": "Map of the places written about in the journal",
     "empty": "No destinations have coordinates yet. Add them to a destination in the Studio and they will appear here."
+  },
+  "parityTool": {
+    "metaTitle": "i18n Parity Checker",
+    "metaDescription": "Compare two translation JSON files and see exactly which keys have drifted apart. Runs entirely in your browser.",
+    "eyebrow": "The lab · Developer tools",
+    "title": "Two dictionary files. Which keys drifted?",
+    "description": "Paste or open two translation files and get the key paths that exist on one side only, plus any key left blank. Nothing is uploaded — both files are read in this tab.",
+    "leftLabel": "First file",
+    "rightLabel": "Second file",
+    "pastePlaceholder": "Paste JSON here, or choose a file above",
+    "compare": "Compare",
+    "clear": "Clear",
+    "allMatch": "Exact parity — every key matches on both sides.",
+    "drift": "These keys have drifted apart.",
+    "keyCountLeft": "Keys on the left",
+    "keyCountRight": "Keys on the right",
+    "missingInRight": "Missing on the right",
+    "missingInLeft": "Missing on the left",
+    "emptyInLeft": "Blank on the left",
+    "emptyInRight": "Blank on the right",
+    "none": "None",
+    "errorEmpty": "This side is empty — choose a file or paste some JSON.",
+    "errorInvalidJson": "That is not valid JSON.",
+    "errorNotObject": "Expected a JSON object at the top level, not an array or a bare value.",
+    "localNote": "Runs in your browser. Neither file leaves this tab."
   }
 }

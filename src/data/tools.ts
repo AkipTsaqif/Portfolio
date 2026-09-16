@@ -40,6 +40,15 @@ export const labTools: LabTool[] = [
     status: "Experimental",
     localOnly: false,
   },
+  {
+    slug: "i18n-parity",
+    name: "i18n Parity Checker",
+    description:
+      "Compare two translation files and find the keys that drifted apart.",
+    category: "Developer",
+    status: "Stable",
+    localOnly: true,
+  },
 ];
 
 /**
