@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "bun test",
     "check:i18n": "bun run ./scripts/check-i18n-parity.ts",
     "db:migrate": "bun run ./scripts/db-migrate.ts",

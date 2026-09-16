@@ -49,6 +49,14 @@ jobs:
       - name: Install
         run: bun install --frozen-lockfile
 
+      # `PageProps` and `LayoutProps` are GENERATED globals, written into `.next/types` by
+      # Next. A fresh checkout has no `.next`, so `tsc` alone fails with TS2304 in all 23
+      # files that use them — which is every page in this repo. `bun run typecheck`
+      # generates them itself, but CI states the dependency explicitly so the reason is
+      # visible in the log rather than implied by a package.json script.
+      - name: Generate route types
+        run: bunx next typegen
+
       - name: Typecheck
         run: bun run typecheck
 
